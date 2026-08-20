@@ -1,0 +1,65 @@
+---
+import SectionHeading from './SectionHeading.astro';
+
+interface ShowcaseScreen {
+  title: string;
+  copy: string;
+  image: string;
+  alt: string;
+}
+
+interface Props {
+  showcase: {
+    sectionLabel: string;
+    sectionTitle: string;
+    intro: string;
+    contribution: string;
+    repository: { href: string; label: string };
+    screens: ShowcaseScreen[];
+  };
+}
+
+const { showcase } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<section id="siga-inebi" aria-labelledby="siga-inebi-title" data-scene="desk">
+  <SectionHeading
+    label={showcase.sectionLabel}
+    title={showcase.sectionTitle}
+    titleId="siga-inebi-title"
+  />
+
+  <div class="showcase-intro">
+    <div>
+      <p>{showcase.intro}</p>
+      <p class="showcase-contribution">{showcase.contribution}</p>
+    </div>
+    <a class="showcase-repository" href={showcase.repository.href} target="_blank" rel="noopener noreferrer">
+      {showcase.repository.label}<span aria-hidden="true"> ↗</span>
+    </a>
+  </div>
+
+  <div class="showcase-grid">
+    {
+      showcase.screens.map((screen) => (
+        <article class="showcase-card">
+          <figure class="showcase-image">
+            <img
+              src={`${base}${screen.image}`}
+              alt={screen.alt}
+              width="1200"
+              height="750"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+          <div class="showcase-copy">
+            <h3>{screen.title}</h3>
+            <p>{screen.copy}</p>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>

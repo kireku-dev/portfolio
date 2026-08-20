@@ -7,6 +7,8 @@
 
 body[data-mode='cv'] {
   /* Tokens locales del documento (no tocan la presentacion 3D) */
+  color-scheme: dark;
+  --cv-bg: #1c1d22;
   --cv-ink: var(--on-surface);
   --cv-line: rgba(170, 168, 173, 0.14);
   --cv-line-strong: rgba(170, 168, 173, 0.26);
@@ -14,6 +16,7 @@ body[data-mode='cv'] {
   --cv-panel-2: #262a32;
   --cv-rule: #313b44;
   --cv-accent: var(--primary);
+  --cv-nav-bg: rgba(28, 29, 34, 0.86);
 
   /* Apaga glows/sombras decorativas heredadas */
   --glow: none;
@@ -27,8 +30,25 @@ body[data-mode='cv'] {
   background:
     linear-gradient(transparent calc(100% - 1px), var(--cv-line) calc(100% - 1px)) 0 0 / 100% 56px,
     linear-gradient(90deg, transparent calc(100% - 1px), var(--cv-line) calc(100% - 1px)) 0 0 / 56px 100%,
-    var(--bg);
+    var(--cv-bg);
   color: var(--cv-ink);
+}
+
+html[data-color-mode='light'] body[data-mode='cv'] {
+  color-scheme: light;
+  --cv-bg: #f5f7f8;
+  --cv-ink: #1a2028;
+  --cv-line: rgba(50, 60, 72, 0.16);
+  --cv-line-strong: rgba(50, 60, 72, 0.3);
+  --cv-panel: rgba(255, 255, 255, 0.86);
+  --cv-panel-2: #ffffff;
+  --cv-rule: #d7dde2;
+  --cv-accent: #b42318;
+  --cv-nav-bg: rgba(245, 247, 248, 0.9);
+  --text-soft: #4f5965;
+  --text-dim: #687382;
+  --bg: var(--cv-bg);
+  --bg-2: #eef1f4;
 }
 
 /* Oculta artefactos del modo presentacion */
@@ -51,7 +71,7 @@ body[data-mode='cv'] .hero-bg {
    ────────────────────────────────────────────────────────── */
 body[data-mode='cv'] #navbar {
   border-bottom: 1px solid var(--cv-line);
-  background: rgba(28, 29, 34, 0.86);
+  background: var(--cv-nav-bg);
   backdrop-filter: blur(10px);
 }
 
@@ -70,6 +90,42 @@ body[data-mode='cv'] .nav-links a.active {
   color: var(--cv-ink);
 }
 
+body[data-mode='cv'] .color-mode-toggle {
+  position: fixed;
+  top: 0.65rem;
+  right: 1rem;
+  z-index: 1001;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.45rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--cv-line-strong);
+  border-radius: 999px;
+  background: var(--cv-panel);
+  color: var(--cv-ink);
+  box-shadow: none;
+  font-family: var(--font-label);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: border-color var(--transition), background var(--transition), transform var(--transition);
+}
+
+body[data-mode='cv'] .color-mode-toggle:hover,
+body[data-mode='cv'] .color-mode-toggle:focus-visible {
+  border-color: var(--cv-accent);
+  background: var(--cv-panel-2);
+  transform: translateY(-1px);
+}
+
+body[data-mode='cv'] .color-mode-toggle [data-theme-toggle-icon] {
+  color: var(--cv-accent);
+  font-size: 1rem;
+  line-height: 1;
+}
+
 /* ──────────────────────────────────────────────────────────
    RITMO Y SECCIONES
    ────────────────────────────────────────────────────────── */
@@ -78,9 +134,18 @@ body[data-mode='cv'] section {
   scroll-margin-top: 4.5rem;
 }
 
+body[data-mode='cv'] .cv-document > section {
+  min-height: 100svh;
+  min-height: 100dvh;
+  display: grid;
+  align-content: center;
+}
+
 body[data-mode='cv'] #hero {
-  min-height: auto;
-  padding-top: 6rem;
+  min-height: 100svh;
+  min-height: 100dvh;
+  padding-top: 5.5rem;
+  padding-bottom: 4.5rem;
 }
 
 body[data-mode='cv'] .hero-content,
@@ -434,7 +499,8 @@ body.career-dialog-open {
 body[data-mode='cv'] .career-dialog {
   width: min(920px, calc(100vw - 2rem));
   max-width: none;
-  max-height: none;
+  height: min(92dvh, 940px);
+  max-height: calc(100dvh - 2rem);
   margin: auto;
   padding: 0;
   overflow: visible;
@@ -456,7 +522,8 @@ body[data-mode='cv'] .career-dialog[open] {
 body[data-mode='cv'] .career-dialog__frame {
   display: flex;
   flex-direction: column;
-  max-height: min(86dvh, 780px);
+  height: 100%;
+  max-height: none;
   border-top: 3px solid var(--cv-accent);
 }
 
@@ -647,6 +714,25 @@ body[data-mode='cv'] .project-card {
   padding: 1.5rem;
 }
 
+body[data-mode='cv'] .project-preview {
+  margin: -1.5rem -1.5rem 1.3rem;
+  overflow: hidden;
+  border-bottom: 1px solid var(--cv-line);
+  background: var(--cv-rule);
+}
+
+body[data-mode='cv'] .project-preview img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  transition: transform 500ms ease;
+}
+
+body[data-mode='cv'] .project-card:hover .project-preview img {
+  transform: scale(1.025);
+}
+
 body[data-mode='cv'] .project-code {
   color: var(--cv-accent);
   text-shadow: none !important;
@@ -675,6 +761,105 @@ body[data-mode='cv'] .project-desc {
 
 body[data-mode='cv'] .project-link {
   color: var(--cv-accent);
+}
+
+/* ──────────────────────────────────────────────────────────
+   SIGA-INEBI — evidencia de producto
+   ────────────────────────────────────────────────────────── */
+body[data-mode='cv'] .showcase-intro {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+body[data-mode='cv'] .showcase-intro p {
+  max-width: 68ch;
+  margin: 0;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+
+body[data-mode='cv'] .showcase-intro .showcase-contribution {
+  margin-top: 0.75rem;
+  color: var(--cv-ink);
+  font-weight: 600;
+}
+
+body[data-mode='cv'] .showcase-repository {
+  flex: 0 0 auto;
+  padding: 0.75rem 0.95rem;
+  border: 1px solid var(--cv-line-strong);
+  color: var(--cv-accent);
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+body[data-mode='cv'] .showcase-repository:hover,
+body[data-mode='cv'] .showcase-repository:focus-visible {
+  border-color: var(--cv-accent);
+  background: var(--primary-dim);
+}
+
+body[data-mode='cv'] .showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+body[data-mode='cv'] .showcase-card {
+  overflow: hidden;
+  border: 1px solid var(--cv-line);
+  background: var(--cv-panel);
+  transition: border-color var(--transition), transform var(--transition), background var(--transition);
+}
+
+body[data-mode='cv'] .showcase-card:hover {
+  border-color: var(--cv-line-strong);
+  background: var(--cv-panel-2);
+  transform: translateY(-3px);
+}
+
+body[data-mode='cv'] .showcase-image {
+  margin: 0;
+  border-bottom: 1px solid var(--cv-line);
+  background: var(--cv-rule);
+}
+
+body[data-mode='cv'] .showcase-image img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  transition: transform 500ms ease;
+}
+
+body[data-mode='cv'] .showcase-card:hover .showcase-image img {
+  transform: scale(1.02);
+}
+
+body[data-mode='cv'] .showcase-copy {
+  padding: 1rem 1.15rem 1.15rem;
+}
+
+body[data-mode='cv'] .showcase-copy h3 {
+  margin: 0 0 0.45rem;
+  color: var(--cv-ink);
+  font-family: var(--font-headline);
+  font-size: 1rem;
+}
+
+body[data-mode='cv'] .showcase-copy p {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.94rem;
+  line-height: 1.6;
 }
 
 /* ──────────────────────────────────────────────────────────
@@ -808,6 +993,22 @@ body[data-mode='cv'] .footer-links a:focus-visible {
   vector-effect: non-scaling-stroke;
 }
 
+html[data-color-mode='light'] .cv-mountain {
+  opacity: calc(0.22 * var(--cv-mountain-fade, 1));
+}
+
+html[data-color-mode='light'] .cv-mountain__facet--t0 {
+  fill: #dfe5e8;
+}
+
+html[data-color-mode='light'] .cv-mountain__facet--t1 {
+  fill: #e8ecef;
+}
+
+html[data-color-mode='light'] .cv-mountain__facet--t2 {
+  fill: #d2d9df;
+}
+
 @media (max-width: 720px) {
   body[data-mode='cv'] #navbar {
     display: none;
@@ -815,6 +1016,29 @@ body[data-mode='cv'] .footer-links a:focus-visible {
 
   body[data-mode='cv'] #hero {
     padding-top: clamp(2rem, 8vw, 3rem);
+  }
+
+  body[data-mode='cv'] .color-mode-toggle {
+    top: 0.65rem;
+    right: 0.65rem;
+  }
+
+  body[data-mode='cv'] .cv-document > section {
+    min-height: auto;
+  }
+
+  body[data-mode='cv'] #hero {
+    min-height: 100svh;
+    min-height: 100dvh;
+  }
+
+  body[data-mode='cv'] .showcase-intro {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  body[data-mode='cv'] .showcase-grid {
+    grid-template-columns: 1fr;
   }
 
   .cv-mountain {

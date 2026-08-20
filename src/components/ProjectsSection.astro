@@ -7,7 +7,10 @@ interface ProjectItem {
   name: string;
   desc: string;
   href: string;
+  linkLabel?: string;
   demo?: string;
+  image?: string;
+  imageAlt?: string;
   id: string;
 }
 
@@ -21,6 +24,7 @@ interface Props {
 }
 
 const { projects } = Astro.props;
+const base = import.meta.env.BASE_URL;
 ---
 
 <section id="projects" aria-labelledby="projects-title" data-scene="desk">
@@ -30,6 +34,20 @@ const { projects } = Astro.props;
     {
       projects.items.map((project) => (
         <article class="project-card">
+          {
+            project.image && (
+              <figure class="project-preview">
+                <img
+                  src={`${base}${project.image}`}
+                  alt={project.imageAlt ?? `Captura de ${project.name}`}
+                  width="960"
+                  height="540"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+            )
+          }
           <div class="project-header">
             <span class="project-code">{project.code}</span>
             <span class="project-lang">{project.lang}</span>
@@ -37,7 +55,7 @@ const { projects } = Astro.props;
           <h3 class="project-name">{project.name}</h3>
           <p class="project-desc">{project.desc}</p>
           <div class="project-links">
-            <a href={project.href} class="project-link" target="_blank" rel="noopener" id={project.id}>Ver repo</a>
+            <a href={project.href} class="project-link" target="_blank" rel="noopener" id={project.id}>{project.linkLabel ?? 'Ver repo'}</a>
             {
               project.demo && (
                 <a href={project.demo} class="project-link" target="_blank" rel="noopener" id={`${project.id}-demo`}>

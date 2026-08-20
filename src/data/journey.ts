@@ -271,16 +271,16 @@ export const journey: JourneyChapter[] = [
     years: '2026',
     yearStart: 2026,
     title: 'ERA IA',
-    subtitle: 'engram · agentes · Go · AI-assisted dev',
+    subtitle: 'ENGRAM · Go · MCP · agentes con contexto',
     narrative:
-      'La IA se convirtió en una capa de ingeniería: memoria persistente, agentes con contexto, MCPs y flujos verificables. Exploro cómo acelerar el desarrollo sin delegar el criterio, la trazabilidad ni la calidad del resultado.',
+      'La IA se convirtió en una capa de ingeniería: memoria persistente, agentes con contexto, MCPs y flujos verificables. En ENGRAM aporté un registro declarativo de agentes que convirtió una configuración rígida en un sistema guiado por datos.',
     stack: ['Go', 'SQLite', 'MCP', 'LLMs', 'Three.js'],
     scene: 'ai',
     weight: 1.4,
     highlights: [
-      { tag: 'AI', text: 'engram: memoria para agentes de IA' },
-      { tag: 'BUILD', text: 'Go + SQLite + servidor MCP' },
-      { tag: 'FLOW', text: 'Workflows con LLMs' },
+      { tag: 'PR', text: '#493 mergeado en ENGRAM' },
+      { tag: 'DATA', text: 'Registro declarativo de agentes' },
+      { tag: 'FLOW', text: 'MCP + workflows con contexto' },
     ],
     metrics: [{ value: 'AI', label: 'workflows asistidos' }],
     details: {
@@ -288,24 +288,24 @@ export const journey: JourneyChapter[] = [
         'En esta etapa uso IA como parte de un sistema de trabajo, no como un atajo para generar código. El objetivo es conservar contexto, hacer explícitas las decisiones y conectar investigación, implementación y verificación.',
       sections: [
         {
-          title: 'Memoria y contexto persistente',
+          title: 'Aporte a ENGRAM: configuración guiada por datos',
           copy:
-            'Trabajo con Engram, una herramienta de memoria persistente para agentes de código construida con Go y SQLite. Su integración mediante MCP permite recuperar decisiones y aprendizajes entre sesiones, reduciendo explicaciones repetidas y pérdida de contexto.',
+            'En el PR #493 reemplacé una configuración basada en un switch de instaladores por un registro declarativo de agentes y un controlador genérico. El resultado convierte agregar compatibilidad con un nuevo agente en, principalmente, un cambio de datos y mantiene los casos especiales explícitos.',
         },
         {
           title: 'Flujos con agentes',
           copy:
-            'Diseño flujos donde la IA ayuda a explorar, implementar y verificar, pero las reglas del repositorio, la evidencia y las pruebas siguen siendo la autoridad. Esa misma combinación de narrativa, WebGL y arquitectura modular sostiene este portfolio.',
+            'Trabajo con ENGRAM, una herramienta de memoria persistente para agentes de código construida con Go y SQLite. Su integración mediante MCP recupera decisiones y aprendizajes entre sesiones; la IA ayuda a explorar, implementar y verificar, mientras las reglas, evidencia y pruebas siguen siendo la autoridad.',
         },
       ],
       outcomes: [
-        'Memoria persistente aplicada a sesiones de desarrollo.',
+        'PR #493 mergeado: registro declarativo y setup nativo para nuevos agentes.',
         'Integraciones MCP y workflows de agentes con contexto recuperable.',
         'Automatización con controles de calidad y trazabilidad explícitos.',
       ],
       link: {
-        label: 'Ver Engram en GitHub',
-        href: 'https://github.com/Gentleman-Programming/engram',
+        label: 'Ver PR #493 en ENGRAM',
+        href: 'https://github.com/Gentleman-Programming/engram/pull/493',
       },
     },
   },

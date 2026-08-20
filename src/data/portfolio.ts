@@ -29,14 +29,15 @@ export const portfolioData = {
     { href: '#studies', id: 'nav-studies', label: 'studies' },
     { href: '#skills', id: 'nav-skills', label: 'skills' },
     { href: '#projects', id: 'nav-projects', label: 'projects' },
+    { href: '#siga-inebi', id: 'nav-siga-inebi', label: 'siga' },
     { href: '#hobbies', id: 'nav-hobbies', label: 'hobbies' },
     { href: '#contact', id: 'nav-contact', label: 'contact' },
   ],
   hero: {
-    tag: 'Backend engineer · cloud track · futurist computing',
+    tag: 'Backend engineer · cloud · productos con impacto',
     name: 'Daniel Bautista',
     summary:
-      `Desarrollo backend, automatizacion e infraestructura con foco en sistemas confiables. Tengo ${professionalExperience} de experiencia profesional y me he estado especializando en GCP mientras sigo fortaleciendo mi base en arquitectura y cloud.`,
+      `Desarrollo backend, automatización e infraestructura con foco en sistemas confiables. Tengo ${professionalExperience} de experiencia profesional y sigo fortaleciendo mi base en arquitectura, cloud y productos con impacto real.`,
     metrics: [
       { value: professionalExperience, label: 'experiencia profesional' },
       { value: 'GCP', label: 'especializacion en progreso' },
@@ -47,9 +48,9 @@ export const portfolioData = {
     sectionLabel: '// 01 > about.exe',
     sectionTitle: 'SOBRE MI',
     paragraphs: [
-      `Soy Daniel Eduardo Bautista Fuentes, un dev guatemalteco enfocado en construir sistemas que escalen y se mantengan bien. Mi experiencia profesional es de ${professionalExperience}, y el resto de mi crecimiento ha venido de estudio, practica constante y proyectos reales.`,
-      'Me especializo en backend e infraestructura: desde APIs y pipelines de CI/CD hasta despliegues automatizados en cloud, pasando por ERPs y herramientas de calculo para ingenieria civil. Actualmente he estado profundizando especialmente en GCP.',
-      'Me interesa la tecnologia aplicada con criterio: automatizacion, arquitectura, cloud y herramientas que resuelvan problemas reales. Disfruto explorar nuevas IAs, refinar procesos y seguir fortaleciendo mi base como ingeniero.',
+      `Soy Daniel Eduardo Bautista Fuentes, un desarrollador guatemalteco enfocado en construir sistemas que escalen y se mantengan bien. Mi experiencia profesional es de ${professionalExperience}; el resto de mi crecimiento ha venido del estudio, la práctica constante y proyectos reales.`,
+      'Me especializo en backend e infraestructura: desde APIs y pipelines de CI/CD hasta despliegues automatizados en cloud, pasando por ERPs y herramientas de cálculo para ingeniería civil. Actualmente profundizo especialmente en GCP.',
+      'Me interesa la tecnología aplicada con criterio: automatización, arquitectura, cloud y herramientas que resuelvan problemas reales. Disfruto explorar nuevas IAs, refinar procesos y seguir fortaleciendo mi base como ingeniero.',
     ],
     tags: ['Python', 'Java', 'TypeScript', 'Docker', 'CI/CD', 'GCP', 'REST APIs', 'SQL', 'Angular', 'Assembly', 'Linux', 'Git'],
   },
@@ -98,9 +99,11 @@ export const portfolioData = {
         code: 'PY',
         lang: 'Python / Ingenieria',
         name: 'CALCULO DE VIGAS ESTRUCTURALES',
-        desc: 'Sistema para ingenieros civiles que calcula vigas con cargas gravitacionales, flexiones y momentos. Proyecto freelance en desarrollo activo.',
-        href: 'https://github.com/daniel-baf/calculo-vigas-estructurales',
-        demo: 'https://daniel-baf.github.io/calculo-vigas-estructurales/',
+        desc: 'Aplicación web para el diseño paso a paso de vigas según ACI 318-19, procesada localmente en el navegador. Proyecto freelance en desarrollo activo.',
+        href: 'https://calculo-vigas-estructurales.danibaufu.workers.dev/',
+        linkLabel: 'Abrir aplicación',
+        image: '/assets/images/calculo-vigas-preview.webp',
+        imageAlt: 'Interfaz de Diseño de Viga con flujo guiado de cálculo estructural.',
         id: 'proj-vigas',
       },
       {
@@ -145,8 +148,46 @@ export const portfolioData = {
       },
     ],
   },
+  showcase: {
+    sectionLabel: '// 06 > siga-inebi.product',
+    sectionTitle: 'SIGA-INEBI',
+    intro:
+      'Plataforma de gestión académica para colegios: concentra identidad, personas, matrículas, asistencia, ciclos, cursos y asignaciones docentes en un mismo producto.',
+    contribution:
+      'Mi aporte combina planificación de sprints, definición y desarrollo de tickets, revisión de Pull Requests e integración de funcionalidades para sostener una entrega coherente.',
+    repository: {
+      href: 'https://github.com/siga-inebi/siga-inebi',
+      label: 'Ver repositorio del proyecto',
+    },
+    screens: [
+      {
+        title: 'Panel y accesos por rol',
+        copy: 'Resumen operativo del establecimiento, accesos rápidos e identidad de la sesión para administrar el sistema desde un punto central.',
+        image: '/assets/images/siga-inebi-dashboard.webp',
+        alt: 'Panel principal de SIGA-INEBI con accesos a estudiantes, docentes, familias y personas.',
+      },
+      {
+        title: 'Matrículas',
+        copy: 'Flujo para registrar estudiantes, asignar sección y mantener su historial de matrícula dentro del ciclo escolar.',
+        image: '/assets/images/siga-inebi-matriculas.webp',
+        alt: 'Pantalla de matrículas de SIGA-INEBI con formulario de nueva matrícula.',
+      },
+      {
+        title: 'Asistencia',
+        copy: 'Consulta y registro de movimientos de asistencia con filtros por estudiante, jornada y fecha.',
+        image: '/assets/images/siga-inebi-asistencia.webp',
+        alt: 'Pantalla de asistencia de SIGA-INEBI con filtros y tabla de movimientos.',
+      },
+      {
+        title: 'Ciclos y asignaciones',
+        copy: 'Configuración académica de cursos, secciones, planes de estudio y asignación docente para preparar cada ciclo.',
+        image: '/assets/images/siga-inebi-ciclo-asignaciones.webp',
+        alt: 'Modal de asignación docente de SIGA-INEBI para cursos del ciclo escolar.',
+      },
+    ],
+  },
   hobbies: {
-    sectionLabel: '// 06 > hobbies.txt',
+    sectionLabel: '// 07 > hobbies.txt',
     sectionTitle: 'AFICIONES',
     items: [
       { label: 'play', name: 'Gaming' },
@@ -158,7 +199,7 @@ export const portfolioData = {
     ],
   },
   contact: {
-    sectionLabel: '// 07 > contact.sh',
+    sectionLabel: '// 08 > contact.sh',
     sectionTitle: 'CONTACTO',
     intro: '$ echo "Tienes un proyecto? Hablemos."',
     email: 'danibaufu@gmail.com',
