@@ -1,21 +1,26 @@
-import { journey } from './journey';
+import { formatProfessionalExperience, journey } from './journey';
+import type { JourneyDetails } from './journey';
 
 // Adapta los capitulos de la historia (fuente de verdad) al shape que espera
 // TimelineSection.astro ({ date, role, company, desc }). Se omiten intro/outro
 // porque son bookends narrativos, no etapas de carrera.
 const careerItemsFromJourney = journey
-  .reduce<Array<{ date: string; role: string; company: string; desc: string }>>((items, chapter) => {
+  .reduce<Array<{ id: string; date: string; role: string; company: string; desc: string; details?: JourneyDetails }>>((items, chapter) => {
     // intro/outro son bookends narrativos, no etapas de carrera.
     if (chapter.id === 'intro' || chapter.id === 'outro') return items;
     items.push({
+      id: chapter.id,
       date: chapter.years.toUpperCase(),
       role: chapter.title,
       company: chapter.stack.slice(0, 4).join(' · ') || 'Guatemala',
       desc: chapter.narrative,
+      details: chapter.details,
     });
     return items;
   }, []) // una sola pasada: filtra + transforma a la vez
   .reverse(); // mas reciente primero, como el resto del CV
+
+const professionalExperience = formatProfessionalExperience();
 
 export const portfolioData = {
   navLinks: [
@@ -31,9 +36,9 @@ export const portfolioData = {
     tag: 'Backend engineer · cloud track · futurist computing',
     name: 'Daniel Bautista',
     summary:
-      'Desarrollo backend, automatizacion e infraestructura con foco en sistemas confiables. Tengo 2 anos de experiencia profesional y me he estado especializando en GCP mientras sigo fortaleciendo mi base en arquitectura y cloud.',
+      `Desarrollo backend, automatizacion e infraestructura con foco en sistemas confiables. Tengo ${professionalExperience} de experiencia profesional y me he estado especializando en GCP mientras sigo fortaleciendo mi base en arquitectura y cloud.`,
     metrics: [
-      { value: '2 anos', label: 'experiencia profesional' },
+      { value: professionalExperience, label: 'experiencia profesional' },
       { value: 'GCP', label: 'especializacion en progreso' },
       { value: 'Backend', label: 'Python · Java · APIs · CI/CD' },
     ],
@@ -42,7 +47,7 @@ export const portfolioData = {
     sectionLabel: '// 01 > about.exe',
     sectionTitle: 'SOBRE MI',
     paragraphs: [
-      'Soy Daniel Eduardo Bautista Fuentes, un dev guatemalteco enfocado en construir sistemas que escalen y se mantengan bien. Mi experiencia profesional es de 2 anos, y el resto de mi crecimiento ha venido de estudio, practica constante y proyectos reales.',
+      `Soy Daniel Eduardo Bautista Fuentes, un dev guatemalteco enfocado en construir sistemas que escalen y se mantengan bien. Mi experiencia profesional es de ${professionalExperience}, y el resto de mi crecimiento ha venido de estudio, practica constante y proyectos reales.`,
       'Me especializo en backend e infraestructura: desde APIs y pipelines de CI/CD hasta despliegues automatizados en cloud, pasando por ERPs y herramientas de calculo para ingenieria civil. Actualmente he estado profundizando especialmente en GCP.',
       'Me interesa la tecnologia aplicada con criterio: automatizacion, arquitectura, cloud y herramientas que resuelvan problemas reales. Disfruto explorar nuevas IAs, refinar procesos y seguir fortaleciendo mi base como ingeniero.',
     ],

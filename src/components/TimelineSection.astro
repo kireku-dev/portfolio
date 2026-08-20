@@ -1,11 +1,20 @@
 ---
 import SectionHeading from './SectionHeading.astro';
 
+interface TimelineDetails {
+  intro: string;
+  sections: Array<{ title: string; copy: string }>;
+  outcomes?: string[];
+  link?: { label: string; href: string };
+}
+
 interface TimelineItem {
+  id?: string;
   date: string;
   role: string;
   company: string;
   desc: string;
+  details?: TimelineDetails;
 }
 
 interface Props {
@@ -25,15 +34,94 @@ const { id, scene, titleId, sectionLabel, sectionTitle, items } = Astro.props;
 
   <div class="timeline" role="list">
     {
-      items.map((item) => (
+      items.map((item, index) => {
+        const dialogId = `${id}-detail-${item.id ?? index}`;
+        const titleId = `${dialogId}-title`;
+        const introId = `${dialogId}-intro`;
+
+        return (
         <article class="timeline-item" role="listitem">
           <div class="timeline-dot" aria-hidden="true"></div>
           <p class="timeline-date">{item.date}</p>
           <h3 class="timeline-role">{item.role}</h3>
           <p class="timeline-company">{item.company}</p>
           <p class="timeline-desc">{item.desc}</p>
+          {item.details && (
+            <>
+              <button
+                class="timeline-more"
+                type="button"
+                aria-haspopup="dialog"
+                aria-controls={dialogId}
+                data-career-dialog-open={dialogId}
+              >
+                Ver más
+                <span aria-hidden="true"> ↗</span>
+              </button>
+
+              <dialog
+                class="career-dialog"
+                id={dialogId}
+                aria-labelledby={titleId}
+                aria-describedby={introId}
+                data-career-dialog
+              >
+                <div class="career-dialog__frame">
+                  <header class="career-dialog__header">
+                    <div>
+                      <p class="career-dialog__eyebrow">{item.date} · trayectoria</p>
+                      <h2 class="career-dialog__title" id={titleId}>{item.role}</h2>
+                    </div>
+                    <button
+                      class="career-dialog__close"
+                      type="button"
+                      aria-label={`Cerrar detalle de ${item.role}`}
+                      data-career-dialog-close
+                    >
+                      <span aria-hidden="true">×</span>
+                    </button>
+                  </header>
+
+                  <div class="career-dialog__body">
+                    <p class="career-dialog__intro" id={introId}>{item.details.intro}</p>
+
+                    <div class="career-dialog__sections">
+                      {item.details.sections.map((section) => (
+                        <section class="career-dialog__section">
+                          <h3>{section.title}</h3>
+                          <p>{section.copy}</p>
+                        </section>
+                      ))}
+                    </div>
+
+                    {item.details.outcomes && item.details.outcomes.length > 0 && (
+                      <section class="career-dialog__outcomes" aria-labelledby={`${dialogId}-outcomes`}>
+                        <h3 id={`${dialogId}-outcomes`}>Impacto y resultados</h3>
+                        <ul>
+                          {item.details.outcomes.map((outcome) => <li>{outcome}</li>)}
+                        </ul>
+                      </section>
+                    )}
+
+                    {item.details.link && (
+                      <a
+                        class="career-dialog__link"
+                        href={item.details.link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {item.details.link.label}
+                        <span aria-hidden="true"> ↗</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </dialog>
+            </>
+          )}
         </article>
-      ))
+        );
+      })
     }
   </div>
 </section>

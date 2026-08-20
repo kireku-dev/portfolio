@@ -401,6 +401,212 @@ body[data-mode='cv'] .timeline-desc {
   max-width: 62ch;
 }
 
+body[data-mode='cv'] .timeline-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 1.1rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--cv-line-strong);
+  background: transparent;
+  color: var(--cv-accent);
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+}
+
+body[data-mode='cv'] .timeline-more:hover,
+body[data-mode='cv'] .timeline-more:focus-visible {
+  border-color: var(--cv-accent);
+  background: var(--primary-dim);
+  color: var(--cv-ink);
+}
+
+body.career-dialog-open {
+  overflow: hidden;
+}
+
+body[data-mode='cv'] .career-dialog {
+  width: min(920px, calc(100vw - 2rem));
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  overflow: visible;
+  border: 1px solid var(--cv-line-strong);
+  background: var(--cv-panel);
+  color: var(--cv-ink);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.55);
+}
+
+body[data-mode='cv'] .career-dialog::backdrop {
+  background: rgba(10, 11, 14, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+body[data-mode='cv'] .career-dialog[open] {
+  animation: career-dialog-enter 180ms ease-out;
+}
+
+body[data-mode='cv'] .career-dialog__frame {
+  display: flex;
+  flex-direction: column;
+  max-height: min(86dvh, 780px);
+  border-top: 3px solid var(--cv-accent);
+}
+
+body[data-mode='cv'] .career-dialog__header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  border-bottom: 1px solid var(--cv-line);
+  background: var(--cv-panel-2);
+}
+
+body[data-mode='cv'] .career-dialog__eyebrow {
+  margin: 0 0 0.45rem;
+  color: var(--cv-accent);
+  font-family: var(--font-label);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+body[data-mode='cv'] .career-dialog__title {
+  margin: 0;
+  color: var(--cv-ink);
+  font-family: var(--font-headline);
+  font-size: clamp(1.7rem, 4vw, 2.8rem);
+  line-height: 1;
+}
+
+body[data-mode='cv'] .career-dialog__close {
+  display: grid;
+  flex: 0 0 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--cv-line-strong);
+  background: transparent;
+  color: var(--text-soft);
+  font-size: 1.65rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+body[data-mode='cv'] .career-dialog__close:hover,
+body[data-mode='cv'] .career-dialog__close:focus-visible {
+  border-color: var(--cv-accent);
+  color: var(--cv-accent);
+}
+
+body[data-mode='cv'] .career-dialog__body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(1.25rem, 3.5vw, 2.25rem);
+  scrollbar-color: var(--cv-accent) var(--cv-panel-2);
+}
+
+body[data-mode='cv'] .career-dialog__intro {
+  max-width: 72ch;
+  margin: 0;
+  color: var(--cv-ink);
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  line-height: 1.75;
+}
+
+body[data-mode='cv'] .career-dialog__sections {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 1.8rem;
+  border: 1px solid var(--cv-line);
+  background: var(--cv-line);
+}
+
+body[data-mode='cv'] .career-dialog__section,
+body[data-mode='cv'] .career-dialog__outcomes {
+  width: auto;
+  margin: 0;
+  padding: 1.25rem;
+  background: var(--cv-panel-2);
+}
+
+body[data-mode='cv'] .career-dialog__section h3,
+body[data-mode='cv'] .career-dialog__outcomes h3 {
+  margin: 0 0 0.7rem;
+  color: var(--cv-accent);
+  font-family: var(--font-label);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body[data-mode='cv'] .career-dialog__section p {
+  margin: 0;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+
+body[data-mode='cv'] .career-dialog__outcomes {
+  margin-top: 1px;
+  border: 1px solid var(--cv-line);
+}
+
+body[data-mode='cv'] .career-dialog__outcomes ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+body[data-mode='cv'] .career-dialog__outcomes li {
+  position: relative;
+  padding-left: 1rem;
+  color: var(--text-soft);
+  line-height: 1.55;
+}
+
+body[data-mode='cv'] .career-dialog__outcomes li::before {
+  content: '';
+  position: absolute;
+  top: 0.68em;
+  left: 0;
+  width: 0.35rem;
+  height: 0.35rem;
+  background: var(--cv-accent);
+  transform: rotate(45deg);
+}
+
+body[data-mode='cv'] .career-dialog__link {
+  display: inline-flex;
+  margin-top: 1.5rem;
+  color: var(--cv-accent);
+  font-family: var(--font-label);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-underline-offset: 0.3rem;
+}
+
+@keyframes career-dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+}
+
 /* ──────────────────────────────────────────────────────────
    SKILLS — barra fina, fill rojo
    ────────────────────────────────────────────────────────── */
@@ -614,11 +820,37 @@ body[data-mode='cv'] .footer-links a:focus-visible {
   .cv-mountain {
     opacity: calc(0.32 * var(--cv-mountain-fade, 1));
   }
+
+  body[data-mode='cv'] .career-dialog {
+    width: calc(100vw - 1rem);
+  }
+
+  body[data-mode='cv'] .career-dialog__frame {
+    max-height: calc(100dvh - 1rem);
+  }
+
+  body[data-mode='cv'] .career-dialog__header,
+  body[data-mode='cv'] .career-dialog__body {
+    padding: 1.1rem;
+  }
+
+  body[data-mode='cv'] .career-dialog__sections,
+  body[data-mode='cv'] .career-dialog__outcomes ul {
+    grid-template-columns: 1fr;
+  }
+
+  body[data-mode='cv'] .timeline-more {
+    min-height: 2.75rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .cv-mountain {
     opacity: 0.28;
+  }
+
+  body[data-mode='cv'] .career-dialog[open] {
+    animation: none;
   }
 }
 
@@ -665,6 +897,8 @@ body[data-mode='cv'] .footer-links a:focus-visible {
   .hero-cta,
   .scroll-indicator,
   .cv-mountain,
+  .timeline-more,
+  .career-dialog,
   footer .footer-links {
     display: none !important;
   }

@@ -32,6 +32,31 @@ export interface JourneyHighlight {
   text: string;
 }
 
+export interface JourneyDetailSection {
+  title: string;
+  copy: string;
+}
+
+export interface JourneyDetails {
+  intro: string;
+  sections: JourneyDetailSection[];
+  outcomes?: string[];
+  link?: JourneyLink;
+}
+
+// El historial disponible confirma 2024 como el primer año profesional. Al no
+// existir mes/dia verificable, la experiencia se expresa por año calendario.
+export const CAREER_START_YEAR = 2024;
+
+export function getProfessionalExperienceYears(currentYear = new Date().getFullYear()) {
+  return Math.max(0, currentYear - CAREER_START_YEAR);
+}
+
+export function formatProfessionalExperience(currentYear = new Date().getFullYear()) {
+  const years = getProfessionalExperienceYears(currentYear);
+  return `${years} ${years === 1 ? 'año' : 'años'}`;
+}
+
 export interface JourneyChapter {
   id: string;
   years: string; // display, e.g. "2021 - 2022"
@@ -45,6 +70,7 @@ export interface JourneyChapter {
   highlights?: JourneyHighlight[]; // burbujas de logros que "venden"
   metrics?: JourneyMetric[];
   links?: JourneyLink[];
+  details?: JourneyDetails; // lectura extendida para el timeline del CV
   cta?: { label: string; href: string };
 }
 
@@ -158,39 +184,87 @@ export const journey: JourneyChapter[] = [
     title: 'LIDERAZGO',
     subtitle: 'project lead · freelance · entrega end-to-end',
     narrative:
-      'Coordinacion de equipo, gestion de tickets y evaluacion tecnica de talento. En paralelo, freelance: sistema de calculo de vigas estructurales para ingenieria civil, ERP para ONG, autenticacion JWT/CORS y mas, con entrega directa al cliente.',
+      'Coordinación de equipo, gestión de tickets y evaluación técnica de talento. En paralelo, freelance: sistema de cálculo de vigas estructurales para ingeniería civil, ERP para ONG, autenticación JWT/CORS y más, con entrega directa al cliente.',
     stack: ['Python', 'Django', 'JWT', 'JavaScript', 'Project Lead'],
     scene: 'network',
     weight: 1.3,
     highlights: [
-      { tag: 'LEAD', text: 'Lidere entrega end-to-end' },
-      { tag: 'REVIEW', text: 'Evaluacion tecnica de talento' },
-      { tag: 'SHIP', text: 'ERP para ONG + calculo estructural' },
+      { tag: 'LEAD', text: 'Lideré entrega end-to-end' },
+      { tag: 'REVIEW', text: 'Evaluación técnica de talento' },
+      { tag: 'SHIP', text: 'ERP para ONG + cálculo estructural' },
     ],
-    metrics: [{ value: '2 anos', label: 'experiencia profesional' }],
+    metrics: [{ value: formatProfessionalExperience(), label: 'experiencia profesional' }],
+    details: {
+      intro:
+        'En 2025 mi trabajo dejó de ser solo ejecutar tareas: empecé a coordinar entregas, convertir objetivos ambiguos en tickets accionables y sostener la calidad técnica durante todo el ciclo.',
+      sections: [
+        {
+          title: 'Coordinación y criterio técnico',
+          copy:
+            'Acompañé la planificación del equipo, el seguimiento de tickets y la evaluación técnica de talento. Mi foco fue mantener claridad sobre responsables, alcance y condiciones de entrega, sin separar la coordinación de las decisiones de ingeniería.',
+        },
+        {
+          title: 'Entrega directa',
+          copy:
+            'En paralelo construí soluciones freelance de punta a punta: un sistema de cálculo de vigas para ingeniería civil y un ERP para una ONG, además de flujos de autenticación JWT/CORS. Esa cercanía con usuarios y clientes reforzó mi capacidad de traducir necesidades reales en software útil.',
+        },
+      ],
+      outcomes: [
+        'Gestión de trabajo técnico con foco en alcance y entrega.',
+        'Evaluación de talento y acompañamiento de decisiones técnicas.',
+        'Responsabilidad end-to-end, desde el problema hasta la puesta en uso.',
+      ],
+    },
   },
   {
     id: 'cloud',
     years: '2025 - presente',
     yearStart: 2025,
-    title: 'PRODUCCION',
+    title: 'PRODUCCIÓN',
     subtitle: 'VantumST · GCP · Docker · CI/CD',
     narrative:
-      'Backend engineer en VantumST: 13 proyectos privados en produccion desde finales de 2025, con stack JavaScript, TypeScript, Python y PHP. Responsabilidad sobre infraestructura cloud (GCP), contenedores y automatizacion de despliegues.',
+      'Backend engineer en VantumST: software e infraestructura en producción, automatización de despliegues y un trabajo transversal para convertir prácticas probadas del equipo en estándares de ingeniería, revisión y entrega.',
     stack: ['GCP', 'Docker', 'CI/CD', 'TypeScript', 'Python', 'PHP'],
     scene: 'cloud',
     weight: 1.5,
     highlights: [
-      { tag: 'PRs', text: '94 PRs en produccion · 79 merged' },
+      { tag: 'PRs', text: '94 PRs en producción · 79 merged' },
       { tag: 'REVIEW', text: '84 code reviews' },
-      { tag: 'DEPLOY', text: 'Automatice despliegues en GCP' },
+      { tag: 'DEPLOY', text: 'Automaticé despliegues en GCP' },
       { tag: 'INFRA', text: 'Docker + pipelines CI/CD' },
-      { tag: 'SCALE', text: '13 proyectos en produccion' },
+      { tag: 'SCALE', text: '13 proyectos en producción' },
     ],
     metrics: [
-      { value: '13', label: 'proyectos en produccion' },
+      { value: '13', label: 'proyectos en producción' },
       { value: 'GCP', label: 'infraestructura cloud' },
     ],
+    details: {
+      intro:
+        'Estudié cómo Vantum diseñaba, construía, revisaba y desplegaba software en proyectos reales. A partir de esa evidencia consolidé una guía normativa para que las decisiones repetibles dejaran de depender de memoria individual y pudieran discutirse con criterios objetivos.',
+      sections: [
+        {
+          title: 'De prácticas reales a estándar',
+          copy:
+            'El trabajo no consistió en inventar reglas aisladas. Comparé patrones usados en producción y definí un criterio de graduación: una práctica debe estar probada, ser generalizable y poder expresarse como una regla accionable. El resultado cubre UI, arquitectura, APIs, bases de datos y operación.',
+        },
+        {
+          title: 'Revisión de código y Pull Requests',
+          copy:
+            'Documenté unidades de cambio revisables, Conventional Commits, issue primero, PRs de una sola intención y un objetivo de hasta 400 líneas. También establecí hooks versionados, tests de flujos críticos, aprobación humana y revisión automatizada contra criterios verificables.',
+        },
+        {
+          title: 'CI/CD como contrato de entrega',
+          copy:
+            'Unifiqué los comandos locales y de CI mediante Makefiles, con lint, typecheck y tests como controles compartidos. La guía separa develop como integración y main como entrega, y documenta despliegues disparados por Cloud Build hacia Cloud Run en lugar de comandos manuales.',
+        },
+      ],
+      outcomes: [
+        'Repositorio normativo con reglas respaldadas por código en producción.',
+        'Plantillas de issues y PRs con validaciones y etiquetado automatizado.',
+        'Definition of Done común para calidad, seguridad, pruebas y documentación.',
+        'Base reutilizable para onboarding y revisiones con menos ambigüedad.',
+      ],
+    },
   },
   {
     id: 'ai',
@@ -199,7 +273,7 @@ export const journey: JourneyChapter[] = [
     title: 'ERA IA',
     subtitle: 'engram · agentes · Go · AI-assisted dev',
     narrative:
-      'Desarrollo asistido por IA: engram, un sistema de memoria persistente para agentes de codigo en Go/SQLite, flujos de trabajo con MCPs y LLMs, y este mismo portfolio 3D. Tecnologia aplicada con criterio.',
+      'La IA se convirtió en una capa de ingeniería: memoria persistente, agentes con contexto, MCPs y flujos verificables. Exploro cómo acelerar el desarrollo sin delegar el criterio, la trazabilidad ni la calidad del resultado.',
     stack: ['Go', 'SQLite', 'MCP', 'LLMs', 'Three.js'],
     scene: 'ai',
     weight: 1.4,
@@ -209,6 +283,31 @@ export const journey: JourneyChapter[] = [
       { tag: 'FLOW', text: 'Workflows con LLMs' },
     ],
     metrics: [{ value: 'AI', label: 'workflows asistidos' }],
+    details: {
+      intro:
+        'En esta etapa uso IA como parte de un sistema de trabajo, no como un atajo para generar código. El objetivo es conservar contexto, hacer explícitas las decisiones y conectar investigación, implementación y verificación.',
+      sections: [
+        {
+          title: 'Memoria y contexto persistente',
+          copy:
+            'Trabajo con Engram, una herramienta de memoria persistente para agentes de código construida con Go y SQLite. Su integración mediante MCP permite recuperar decisiones y aprendizajes entre sesiones, reduciendo explicaciones repetidas y pérdida de contexto.',
+        },
+        {
+          title: 'Flujos con agentes',
+          copy:
+            'Diseño flujos donde la IA ayuda a explorar, implementar y verificar, pero las reglas del repositorio, la evidencia y las pruebas siguen siendo la autoridad. Esa misma combinación de narrativa, WebGL y arquitectura modular sostiene este portfolio.',
+        },
+      ],
+      outcomes: [
+        'Memoria persistente aplicada a sesiones de desarrollo.',
+        'Integraciones MCP y workflows de agentes con contexto recuperable.',
+        'Automatización con controles de calidad y trazabilidad explícitos.',
+      ],
+      link: {
+        label: 'Ver Engram en GitHub',
+        href: 'https://github.com/Gentleman-Programming/engram',
+      },
+    },
   },
   {
     id: 'outro',

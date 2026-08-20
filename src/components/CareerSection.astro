@@ -2,10 +2,17 @@
 import TimelineSection from './TimelineSection.astro';
 
 interface TimelineItem {
+  id: string;
   date: string;
   role: string;
   company: string;
   desc: string;
+  details?: {
+    intro: string;
+    sections: Array<{ title: string; copy: string }>;
+    outcomes?: string[];
+    link?: { label: string; href: string };
+  };
 }
 
 interface Props {
