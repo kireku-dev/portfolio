@@ -29,7 +29,6 @@ export const portfolioData = {
     { href: '#studies', id: 'nav-studies', label: 'studies' },
     { href: '#skills', id: 'nav-skills', label: 'skills' },
     { href: '#projects', id: 'nav-projects', label: 'projects' },
-    { href: '#siga-inebi', id: 'nav-siga-inebi', label: 'siga' },
     { href: '#hobbies', id: 'nav-hobbies', label: 'hobbies' },
     { href: '#contact', id: 'nav-contact', label: 'contact' },
   ],
@@ -102,8 +101,16 @@ export const portfolioData = {
         desc: 'Aplicación web para el diseño paso a paso de vigas según ACI 318-19, procesada localmente en el navegador. Proyecto freelance en desarrollo activo.',
         href: 'https://calculo-vigas-estructurales.danibaufu.workers.dev/',
         linkLabel: 'Abrir aplicación',
-        image: '/assets/images/calculo-vigas-preview.webp',
-        imageAlt: 'Interfaz de Diseño de Viga con flujo guiado de cálculo estructural.',
+        details: {
+          intro: 'Una aplicación web orientada a ingenieros civiles que guía el diseño de vigas conforme a ACI 318-19 y procesa el cálculo localmente en el navegador.',
+          screenshots: [
+            {
+              image: '/assets/images/calculo-vigas-preview.webp',
+              alt: 'Interfaz de Diseño de Viga con flujo guiado de cálculo estructural.',
+              caption: 'Flujo guiado de catorce pasos para el diseño a flexión, corte y detallado.',
+            },
+          ],
+        },
         id: 'proj-vigas',
       },
       {
@@ -112,6 +119,31 @@ export const portfolioData = {
         name: 'SIGA-INEBI',
         desc: 'Plataforma para colegios que reúne matrículas, asistencia, ciclos, cursos y asignaciones docentes. Planifiqué sprints, definí y desarrollé tickets, revisé Pull Requests e integré funcionalidades.',
         href: 'https://github.com/siga-inebi/siga-inebi',
+        details: {
+          intro: 'SIGA-INEBI centraliza la operación académica de un colegio. Mi aporte combina la planificación de sprints con definición de tickets, desarrollo, revisión de Pull Requests e integración de funcionalidades.',
+          screenshots: [
+            {
+              image: '/assets/images/siga-inebi-dashboard.webp',
+              alt: 'Panel principal de SIGA-INEBI con accesos a estudiantes, docentes, familias y personas.',
+              caption: 'Panel operativo y accesos rápidos por rol.',
+            },
+            {
+              image: '/assets/images/siga-inebi-matriculas.webp',
+              alt: 'Pantalla de matrículas de SIGA-INEBI con formulario de nueva matrícula.',
+              caption: 'Matrículas y registro de estudiantes por sección.',
+            },
+            {
+              image: '/assets/images/siga-inebi-asistencia.webp',
+              alt: 'Pantalla de asistencia de SIGA-INEBI con filtros y tabla de movimientos.',
+              caption: 'Consulta y registro de asistencia.',
+            },
+            {
+              image: '/assets/images/siga-inebi-ciclo-asignaciones.webp',
+              alt: 'Modal de asignación docente de SIGA-INEBI para cursos del ciclo escolar.',
+              caption: 'Ciclos, cursos y asignaciones docentes.',
+            },
+          ],
+        },
         id: 'proj-siga-inebi',
       },
       {
@@ -153,44 +185,6 @@ export const portfolioData = {
         desc: 'Conversor de sistemas numericos (binario, octal, hexadecimal, decimal) con interfaz CLI limpia. Licencia: The Unlicense.',
         href: 'https://github.com/daniel-baf/SystemNumberConverter',
         id: 'proj-converter',
-      },
-    ],
-  },
-  showcase: {
-    sectionLabel: '// 06 > siga-inebi.product',
-    sectionTitle: 'SIGA-INEBI',
-    intro:
-      'Plataforma de gestión académica para colegios: concentra identidad, personas, matrículas, asistencia, ciclos, cursos y asignaciones docentes en un mismo producto.',
-    contribution:
-      'Mi aporte combina planificación de sprints, definición y desarrollo de tickets, revisión de Pull Requests e integración de funcionalidades para sostener una entrega coherente.',
-    repository: {
-      href: 'https://github.com/siga-inebi/siga-inebi',
-      label: 'Ver repositorio del proyecto',
-    },
-    screens: [
-      {
-        title: 'Panel y accesos por rol',
-        copy: 'Resumen operativo del establecimiento, accesos rápidos e identidad de la sesión para administrar el sistema desde un punto central.',
-        image: '/assets/images/siga-inebi-dashboard.webp',
-        alt: 'Panel principal de SIGA-INEBI con accesos a estudiantes, docentes, familias y personas.',
-      },
-      {
-        title: 'Matrículas',
-        copy: 'Flujo para registrar estudiantes, asignar sección y mantener su historial de matrícula dentro del ciclo escolar.',
-        image: '/assets/images/siga-inebi-matriculas.webp',
-        alt: 'Pantalla de matrículas de SIGA-INEBI con formulario de nueva matrícula.',
-      },
-      {
-        title: 'Asistencia',
-        copy: 'Consulta y registro de movimientos de asistencia con filtros por estudiante, jornada y fecha.',
-        image: '/assets/images/siga-inebi-asistencia.webp',
-        alt: 'Pantalla de asistencia de SIGA-INEBI con filtros y tabla de movimientos.',
-      },
-      {
-        title: 'Ciclos y asignaciones',
-        copy: 'Configuración académica de cursos, secciones, planes de estudio y asignación docente para preparar cada ciclo.',
-        image: '/assets/images/siga-inebi-ciclo-asignaciones.webp',
-        alt: 'Modal de asignación docente de SIGA-INEBI para cursos del ciclo escolar.',
       },
     ],
   },
