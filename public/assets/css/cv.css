@@ -27,6 +27,10 @@ body[data-mode='cv'] {
   --border: var(--cv-line);
   --border-strong: var(--cv-line-strong);
 
+  /* El documento necesita una lectura más densa que la presentación 3D. */
+  font-size: 1.0625rem;
+  line-height: 1.65;
+
   background:
     linear-gradient(transparent calc(100% - 1px), var(--cv-line) calc(100% - 1px)) 0 0 / 100% 56px,
     linear-gradient(90deg, transparent calc(100% - 1px), var(--cv-line) calc(100% - 1px)) 0 0 / 56px 100%,
@@ -316,9 +320,9 @@ body[data-mode='cv'] .typed-cursor {
 
 body[data-mode='cv'] .hero-summary {
   color: var(--text-soft);
-  line-height: 1.7;
+  line-height: 1.65;
   max-width: 60ch;
-  font-size: 1.1rem;
+  font-size: 1.08rem;
 }
 
 body[data-mode='cv'] .hero-summary strong {
@@ -490,7 +494,7 @@ body.career-dialog-open {
 }
 
 body[data-mode='cv'] .career-dialog {
-  width: min(920px, calc(100vw - 2rem));
+  width: min(1180px, calc(100vw - 2rem));
   max-width: none;
   height: calc(100dvh - 2rem);
   max-height: calc(100dvh - 2rem);
