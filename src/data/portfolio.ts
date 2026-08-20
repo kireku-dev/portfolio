@@ -107,6 +107,14 @@ export const portfolioData = {
         id: 'proj-vigas',
       },
       {
+        code: 'SIGA',
+        lang: 'Full Stack / Educación',
+        name: 'SIGA-INEBI',
+        desc: 'Plataforma para colegios que reúne matrículas, asistencia, ciclos, cursos y asignaciones docentes. Planifiqué sprints, definí y desarrollé tickets, revisé Pull Requests e integré funcionalidades.',
+        href: 'https://github.com/siga-inebi/siga-inebi',
+        id: 'proj-siga-inebi',
+      },
+      {
         code: 'ERP',
         lang: 'Full Stack / ERP',
         name: 'ERP PARA ONG',

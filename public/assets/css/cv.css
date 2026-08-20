@@ -134,13 +134,6 @@ body[data-mode='cv'] section {
   scroll-margin-top: 4.5rem;
 }
 
-body[data-mode='cv'] .cv-document > section {
-  min-height: 100svh;
-  min-height: 100dvh;
-  display: grid;
-  align-content: center;
-}
-
 body[data-mode='cv'] #hero {
   min-height: 100svh;
   min-height: 100dvh;
@@ -499,7 +492,7 @@ body.career-dialog-open {
 body[data-mode='cv'] .career-dialog {
   width: min(920px, calc(100vw - 2rem));
   max-width: none;
-  height: min(92dvh, 940px);
+  height: calc(100dvh - 2rem);
   max-height: calc(100dvh - 2rem);
   margin: auto;
   padding: 0;
@@ -714,23 +707,33 @@ body[data-mode='cv'] .project-card {
   padding: 1.5rem;
 }
 
-body[data-mode='cv'] .project-preview {
-  margin: -1.5rem -1.5rem 1.3rem;
+body[data-mode='cv'] .project-details {
+  margin-top: auto;
+  border-top: 1px solid var(--cv-line);
+}
+
+body[data-mode='cv'] .project-details summary {
+  padding-top: 0.9rem;
+  color: var(--cv-accent);
+  cursor: pointer;
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body[data-mode='cv'] .project-details__media {
+  margin-top: 0.9rem;
   overflow: hidden;
-  border-bottom: 1px solid var(--cv-line);
+  border: 1px solid var(--cv-line);
   background: var(--cv-rule);
 }
 
-body[data-mode='cv'] .project-preview img {
+body[data-mode='cv'] .project-details__media img {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  transition: transform 500ms ease;
-}
-
-body[data-mode='cv'] .project-card:hover .project-preview img {
-  transform: scale(1.025);
+  height: auto;
 }
 
 body[data-mode='cv'] .project-code {
@@ -1021,10 +1024,6 @@ html[data-color-mode='light'] .cv-mountain__facet--t2 {
   body[data-mode='cv'] .color-mode-toggle {
     top: 0.65rem;
     right: 0.65rem;
-  }
-
-  body[data-mode='cv'] .cv-document > section {
-    min-height: auto;
   }
 
   body[data-mode='cv'] #hero {
