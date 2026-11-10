@@ -2,7 +2,7 @@
 import AboutSection from '../components/AboutSection.astro';
 import CareerSection from '../components/CareerSection.astro';
 import ContactSection from '../components/ContactSection.astro';
-import CvMountain from '../components/CvMountain.astro';
+import CvScene from '../components/CvScene.astro';
 import FooterSection from '../components/FooterSection.astro';
 import HobbiesSection from '../components/HobbiesSection.astro';
 import NavHeroSection from '../components/NavHeroSection.astro';
@@ -11,23 +11,17 @@ import SkillsSection from '../components/SkillsSection.astro';
 import StudiesSection from '../components/StudiesSection.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { portfolioData } from '../data/portfolio';
-
-const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout
-  title="Daniel Bautista | CV"
-  description="CV estatico de Daniel Bautista - Backend Developer, Cloud Infrastructure y GCP."
+  title="Daniel Bautista | CV — Backend & Cloud"
+  description="CV de Daniel Bautista: backend, infraestructura cloud, GCP y desarrollo de productos confiables."
   mode="cv"
-  includeGsap={false}
 >
-  <CvMountain />
+  <CvScene />
 
   <main id="cv-document" class="cv-document">
-    <NavHeroSection
-      navLinks={portfolioData.navLinks}
-      hero={portfolioData.hero}
-    />
+    <NavHeroSection navLinks={portfolioData.navLinks} hero={portfolioData.hero} />
     <AboutSection about={portfolioData.about} />
     <CareerSection career={portfolioData.career} />
     <StudiesSection studies={portfolioData.studies} />
@@ -38,6 +32,11 @@ const base = import.meta.env.BASE_URL;
   </main>
 
   <FooterSection footer={portfolioData.footer} />
-
-  <script is:inline type="module" src={`${base}/assets/js/cv-mountain.js`}></script>
 </BaseLayout>
+
+<script>
+  import { initCvScene } from '../presentation/cv-scene';
+
+  const canvas = document.getElementById('cv-webgl');
+  if (canvas instanceof HTMLCanvasElement) initCvScene(canvas);
+</script>

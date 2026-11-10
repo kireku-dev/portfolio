@@ -1,6 +1,4 @@
 ---
-import HeroTerminal from './HeroTerminal.astro';
-
 interface Props {
   navLinks: { href: string; id: string; label: string }[];
   hero: {
@@ -13,84 +11,69 @@ interface Props {
 
 const { navLinks, hero } = Astro.props;
 const base = import.meta.env.BASE_URL;
+const primaryLinks = navLinks.filter((link) => ['#about', '#career', '#projects', '#contact'].includes(link.href));
 ---
 
-<nav id="navbar" role="navigation" aria-label="Navegacion principal">
-  <a href={`${base}/`} class="nav-logo">&lt;daniel-baf /&gt;</a>
+<nav id="navbar" class="cv-nav" aria-label="Navegación principal">
+  <a href={`${base}/`} class="nav-logo" aria-label="Volver a la experiencia 3D">
+    <span class="nav-logo__mark">DB</span>
+    <span class="nav-logo__name">Daniel Bautista</span>
+  </a>
+
   <ul class="nav-links">
-    {
-      navLinks.map((link) => (
-        <li><a href={link.href} id={link.id}>{link.label}</a></li>
-      ))
-    }
+    {primaryLinks.map((link) => <li><a href={link.href} id={link.id}>{link.label}</a></li>)}
   </ul>
+
+  <div class="cv-nav__actions">
+    <a href={`${base}/`} class="cv-nav__action">Experiencia 3D</a>
+    <button type="button" class="cv-nav__action cv-nav__print" id="cta-print-cv">Imprimir</button>
+    <button
+      class="color-mode-toggle"
+      type="button"
+      aria-label="Activar tema claro"
+      aria-pressed="false"
+      data-theme-toggle
+    >
+      <span aria-hidden="true" data-theme-toggle-icon>☼</span>
+      <span data-theme-toggle-label>Tema claro</span>
+    </button>
+  </div>
 </nav>
 
-<button
-  class="color-mode-toggle"
-  type="button"
-  aria-label="Activar tema claro"
-  aria-pressed="false"
-  data-theme-toggle
->
-  <span aria-hidden="true" data-theme-toggle-icon>☼</span>
-  <span data-theme-toggle-label>Tema claro</span>
-</button>
-
 <header id="hero" role="banner" data-scene="core">
-  <div class="hero-bg" aria-hidden="true"></div>
-
   <div class="hero-content">
     <div class="hero-main">
       <div class="hero-copy">
-        <p class="hero-tag">{hero.tag}</p>
-
-        <div class="hero-avatar-frame fade-up">
-          <picture>
-            <source srcset={`${base}/assets/images/avatar.webp`} type="image/webp" />
-            <img
-              src={`${base}/assets/images/avatar.png`}
-              alt="Avatar pixel art de Daniel Eduardo Bautista Fuentes"
-              class="hero-avatar"
-              width="160"
-              height="160"
-            />
-          </picture>
-        </div>
-
-        <h1 class="hero-name" data-text={hero.name}>
-          {hero.name}
-        </h1>
-
-        <p class="hero-title">
-          &gt; <span id="typed-text"></span><span class="typed-cursor">_</span>
-        </p>
-
+        <p class="hero-tag"><span>Curriculum vitae</span> Guatemala · 2026</p>
+        <h1 class="hero-name">Daniel <span>Bautista.</span></h1>
+        <p class="hero-title">Backend & Cloud Engineer <span>· Plataforma, integraciones y producto</span></p>
         <p class="hero-summary">{hero.summary}</p>
 
         <div class="hero-metrics" aria-label="Resumen profesional">
-          {
-            hero.metrics.map((metric) => (
-              <div class="metric">
-                <span class="metric-value">{metric.value}</span>
-                <span class="metric-label">{metric.label}</span>
-              </div>
-            ))
-          }
+          {hero.metrics.map((metric) => (
+            <div class="metric">
+              <span class="metric-value">{metric.value}</span>
+              <span class="metric-label">{metric.label}</span>
+            </div>
+          ))}
         </div>
 
         <div class="hero-cta">
-          <a href="#projects" class="btn btn-primary" id="cta-projects">Ver proyectos</a>
-          <a href="#contact" class="btn btn-outline" id="cta-contact">Contactame</a>
+          <a href="#projects" class="btn btn-primary" id="cta-projects">Ver proyectos <span aria-hidden="true">↘</span></a>
+          <a href="#contact" class="btn btn-outline" id="cta-contact">Hablemos</a>
         </div>
       </div>
 
-      <HeroTerminal />
+      <div class="hero-visual" aria-hidden="true">
+        <span>Objeto 01 / WebGL</span>
+        <span>Mueve el cursor para rotar</span>
+      </div>
     </div>
   </div>
 
-  <div class="scroll-indicator" aria-hidden="true">
-    <span>SCROLL</span>
-    <div class="scroll-arrow"></div>
-  </div>
+  <a class="scroll-indicator" href="#about" aria-label="Ir al contenido del CV">
+    <span>Explorar CV</span>
+    <span class="scroll-indicator__line" aria-hidden="true"></span>
+    <span aria-hidden="true">↓</span>
+  </a>
 </header>

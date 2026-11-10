@@ -4,6 +4,8 @@ import SectionHeading from './SectionHeading.astro';
 interface HobbyItem {
   label: string;
   name: string;
+  description?: string;
+  href?: string;
 }
 
 interface Props {
@@ -26,6 +28,14 @@ const { hobbies } = Astro.props;
         <div class="hobby-card">
           <span class="hobby-label">{hobby.label}</span>
           <p class="hobby-name">{hobby.name}</p>
+          {hobby.description && <p class="hobby-description">{hobby.description}</p>}
+          {
+            hobby.href && (
+              <a class="hobby-link" href={hobby.href} target="_blank" rel="noopener">
+                Ver recurso<span aria-hidden="true"> ↗</span>
+              </a>
+            )
+          }
         </div>
       ))
     }

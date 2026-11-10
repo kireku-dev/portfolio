@@ -1,7 +1,9 @@
 import { presentationBeats, presentationMeta } from '../data/presentation';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { initInputController } from './input-controller';
-import { initHelpPanel, initMuteToggle, initQualitySettings } from './quality-settings';
+import { initPointerParallax } from './pointer-parallax';
+import { initPresentationLoader } from './presentation-loader';
+import { initHelpPanel, initQualitySettings } from './quality-settings';
 import { initScrollTimeline } from './scroll-timeline';
 import { initSmoothScroll } from './smooth-scroll';
 import { initThreeScene } from './three-scene';
@@ -10,19 +12,12 @@ import { initWorldConsume } from './world-consume';
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-function hideLoading() {
-  const loading = document.getElementById('presentationLoading');
-  if (!loading) return;
-  loading.setAttribute('aria-hidden', 'true');
-  loading.classList.add('presentation-loading--done');
-}
-
-function showWebGLFallback() {
+function showWebGLFallback(onReady: () => void) {
   const fallback = document.getElementById('presentationFallback');
   const canvas = document.getElementById('webgl-canvas');
   if (fallback) fallback.hidden = false;
   if (canvas) canvas.hidden = true;
-  hideLoading();
+  onReady();
 }
 
 function watchThemeColor(scene: ReturnType<typeof initThreeScene>) {
@@ -48,6 +43,7 @@ export function initPresentation() {
   const canvas = document.getElementById('webgl-canvas') as HTMLCanvasElement | null;
   if (!canvas) return;
 
+  const loader = initPresentationLoader();
   const typography = initTypographyDriver(presentationBeats);
   const lenis = initSmoothScroll();
 
@@ -55,7 +51,7 @@ export function initPresentation() {
   const scene = initThreeScene(canvas, quality.getSettings());
 
   if (!scene) {
-    showWebGLFallback();
+    showWebGLFallback(loader.complete);
     const timeline = initScrollTimeline({
       beats: presentationBeats,
       typography,
@@ -63,30 +59,29 @@ export function initPresentation() {
     });
     initInputController({ timeline, beats: presentationBeats, lenis });
     initHelpPanel(presentationMeta.helpCopy);
-    initMuteToggle();
-    hideLoading();
     return;
   }
 
   quality.setScene(scene);
   quality.applyToScene();
   watchThemeColor(scene);
+  initPointerParallax();
 
   const timeline = initScrollTimeline({
     beats: presentationBeats,
     typography,
     onProgress: (progress) => {
       scene.update(progress);
+      document.getElementById('presentation-root')?.style.setProperty('--presentation-progress', String(progress));
     },
   });
 
   initInputController({ timeline, beats: presentationBeats, lenis });
-  initMuteToggle();
   initHelpPanel(presentationMeta.helpCopy);
-  hideLoading();
 
   window.requestAnimationFrame(() => {
     ScrollTrigger.refresh();
+    loader.complete();
   });
 
   console.log('[PRESENTATION] Scroll + WebGL initialized');

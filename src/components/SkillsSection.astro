@@ -5,7 +5,7 @@ interface SkillItem {
   label: string;
   name: string;
   meta: string;
-  level: number;
+  evidence: string;
 }
 
 interface Props {
@@ -29,7 +29,7 @@ const { skills } = Astro.props;
           <span class="skill-label">{skill.label}</span>
           <p class="skill-name">{skill.name}</p>
           <small class="skill-meta">{skill.meta}</small>
-          <div class="skill-bar-wrap"><div class="skill-bar" data-level={skill.level}></div></div>
+          <p class="skill-evidence">{skill.evidence}</p>
         </div>
       ))
     }

@@ -21,8 +21,7 @@
   },
   "knip": {
     "entry": [
-      "public/assets/js/main.js",
-      "public/assets/js/cv-mountain.js"
+      "public/assets/js/main.js"
     ]
   }
 }

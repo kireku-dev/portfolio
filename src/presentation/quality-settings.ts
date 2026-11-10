@@ -33,8 +33,12 @@ export function initQualitySettings(): QualityController {
 
   function syncButton() {
     if (!toggleBtn) return;
-    toggleBtn.textContent = settings.highQuality ? 'QUALITY 1' : 'QUALITY 0.5';
+    toggleBtn.textContent = settings.highQuality ? 'HQ' : 'ECO';
     toggleBtn.setAttribute('aria-pressed', String(settings.highQuality));
+    toggleBtn.setAttribute(
+      'aria-label',
+      settings.highQuality ? 'Alta calidad activa. Cambiar a modo económico' : 'Modo económico activo. Cambiar a alta calidad',
+    );
   }
 
   function applyToScene() {
@@ -62,23 +66,6 @@ export function initQualitySettings(): QualityController {
     },
     applyToScene,
   };
-}
-
-export function initMuteToggle() {
-  const muteBtn = document.getElementById('presentationMuteToggle');
-  let muted = true;
-
-  function sync() {
-    if (!muteBtn) return;
-    muteBtn.textContent = muted ? 'MUTE' : 'SOUND';
-    muteBtn.setAttribute('aria-pressed', String(muted));
-  }
-
-  sync();
-  muteBtn?.addEventListener('click', () => {
-    muted = !muted;
-    sync();
-  });
 }
 
 export function initHelpPanel(helpCopy: string) {

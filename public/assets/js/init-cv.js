@@ -2,7 +2,6 @@ import { prefersReducedMotion } from './core/runtime.js';
 import { initThemeSystem } from './features/theme-system.js';
 import { initActiveNav } from './features/active-nav.js';
 import { initScrollReveal } from './features/scroll-reveal.js';
-import { initSkillBars } from './features/skill-bars.js';
 import { initSkillPopup } from './features/skill-popup.js';
 import { initTypewriter } from './features/typewriter.js';
 import { initTerminalWriter } from './features/terminal-writer.js';
@@ -19,7 +18,6 @@ export function initCv() {
   initSkillPopup();
   initActiveNav();
   initScrollReveal();
-  initSkillBars();
   initCareerDialogs();
 
   const printBtn = document.getElementById('cta-print-cv');

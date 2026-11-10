@@ -6,8 +6,18 @@ interface Props {
 }
 
 const { label, title, titleId } = Astro.props;
+const labels: Record<string, string> = {
+  'about-title': '01 — Perfil',
+  'career-title': '02 — Experiencia',
+  'studies-title': '03 — Formación',
+  'skills-title': '04 — Capacidades',
+  'projects-title': '05 — Trabajo seleccionado',
+  'hobbies-title': '06 — Docencia y comunidad',
+  'contact-title': '07 — Contacto',
+};
 ---
 
-<div class="pixel-divider" aria-hidden="true"></div>
-<p class="section-label">{label}</p>
-<h2 class="section-title" id={titleId}>{title}</h2>
+<div class="section-heading">
+  <p class="section-label">{labels[titleId] ?? label}</p>
+  <h2 class="section-title" id={titleId}>{title}</h2>
+</div>

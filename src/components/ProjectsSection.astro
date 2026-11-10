@@ -1,17 +1,17 @@
 ---
 import SectionHeading from './SectionHeading.astro';
+import type { JourneyDetails } from '../data/journey';
 
 interface ProjectItem {
   code: string;
   lang: string;
   name: string;
   desc: string;
-  href: string;
+  href?: string;
   linkLabel?: string;
   demo?: string;
-  details?: {
-    intro: string;
-    screenshots: Array<{ image: string; alt: string; caption: string }>;
+  details?: JourneyDetails & {
+    screenshots?: Array<{ image: string; alt: string; caption: string }>;
   };
   id: string;
 }
@@ -46,16 +46,24 @@ const base = import.meta.env.BASE_URL;
             </div>
             <h3 class="project-name">{project.name}</h3>
             <p class="project-desc">{project.desc}</p>
-            <div class="project-links">
-              <a href={project.href} class="project-link" target="_blank" rel="noopener" id={project.id}>{project.linkLabel ?? 'Ver repo'}</a>
-              {
-                project.demo && (
-                  <a href={project.demo} class="project-link" target="_blank" rel="noopener" id={`${project.id}-demo`}>
-                    Ver pagina web
-                  </a>
-                )
-              }
-            </div>
+            {
+              (project.href || project.demo) && (
+                <div class="project-links">
+                  {
+                    project.href && (
+                      <a href={project.href} class="project-link" target="_blank" rel="noopener" id={project.id}>{project.linkLabel ?? 'Ver repo'}</a>
+                    )
+                  }
+                  {
+                    project.demo && (
+                      <a href={project.demo} class="project-link" target="_blank" rel="noopener" id={`${project.id}-demo`}>
+                        Ver página web
+                      </a>
+                    )
+                  }
+                </div>
+              )
+            }
             {
               project.details && (
                 <>
@@ -81,23 +89,56 @@ const base = import.meta.env.BASE_URL;
                       </header>
                       <div class="career-dialog__body">
                         <p class="career-dialog__intro">{project.details.intro}</p>
-                        <div class="project-dialog__gallery">
-                          {
-                            project.details.screenshots.map((screenshot) => (
-                              <figure class="project-dialog__shot">
-                                <img
-                                  src={`${base}${screenshot.image}`}
-                                  alt={screenshot.alt}
-                                  width="1200"
-                                  height="750"
-                                  loading="lazy"
-                                  decoding="async"
-                                />
-                                <figcaption>{screenshot.caption}</figcaption>
-                              </figure>
-                            ))
-                          }
-                        </div>
+                        {
+                          project.details.sections.length > 0 && (
+                            <div class="career-dialog__sections">
+                              {
+                                project.details.sections.map((section) => (
+                                  <section class="career-dialog__section">
+                                    <h3>{section.title}</h3>
+                                    <p>{section.copy}</p>
+                                  </section>
+                                ))
+                              }
+                            </div>
+                          )
+                        }
+                        {
+                          project.details.outcomes && project.details.outcomes.length > 0 && (
+                            <section class="career-dialog__outcomes">
+                              <h3>Resultados</h3>
+                              <ul>{project.details.outcomes.map((outcome) => <li>{outcome}</li>)}</ul>
+                            </section>
+                          )
+                        }
+                        {
+                          project.details.link && (
+                            <a class="career-dialog__link" href={project.details.link.href} target="_blank" rel="noopener">
+                              {project.details.link.label}<span aria-hidden="true"> ↗</span>
+                            </a>
+                          )
+                        }
+                        {
+                          project.details.screenshots && project.details.screenshots.length > 0 && (
+                            <div class="project-dialog__gallery">
+                              {
+                                project.details.screenshots.map((screenshot) => (
+                                  <figure class="project-dialog__shot">
+                                    <img
+                                      src={`${base}${screenshot.image}`}
+                                      alt={screenshot.alt}
+                                      width="1200"
+                                      height="750"
+                                      loading="lazy"
+                                      decoding="async"
+                                    />
+                                    <figcaption>{screenshot.caption}</figcaption>
+                                  </figure>
+                                ))
+                              }
+                            </div>
+                          )
+                        }
                       </div>
                     </div>
                   </dialog>

@@ -11,69 +11,66 @@ const totalBeats = presentationBeats.length;
 const base = import.meta.env.BASE_URL;
 ---
 
-<div class="presentation-hud" role="region" aria-label="Controles de presentacion">
+<header class="presentation-hud" aria-label="Navegación de la presentación">
+  <a href={`${base}/`} class="presentation-brand" aria-label="Daniel Bautista, inicio">
+    <span class="presentation-brand__mark">DB</span>
+    <span class="presentation-brand__name">
+      Daniel Bautista
+      <span class="presentation-brand__role">Backend / Cloud</span>
+    </span>
+  </a>
+
+  <p class="presentation-hud__edition">Cinematic profile <span>2020—2026</span></p>
+
   <div class="presentation-hud__cluster">
     {
       isCv ? (
-        <>
-          <a href={`${base}/`} class="btn btn-primary" id="cta-enter-presentation">
-            Presentacion
-          </a>
-          <button type="button" class="btn btn-outline" id="cta-print-cv">
-            Imprimir CV
-          </button>
-        </>
+        <a href={`${base}/`} class="presentation-hud__cv" id="cta-enter-presentation">
+          Presentación
+        </a>
       ) : (
-        <a href={`${base}/cv`} class="btn btn-outline" id="cta-view-cv">
-          VER CV
+        <a href={`${base}/cv`} class="presentation-hud__cv" id="cta-view-cv">
+          Ver CV
         </a>
       )
     }
   </div>
+</header>
 
-  {
-    !isCv && (
-      <>
-        <div class="presentation-hud__progress" aria-live="polite">
-          <span class="presentation-hud__progress-label">Beat</span>
-          <span class="presentation-hud__progress-value" id="presentationProgress">1/{totalBeats}</span>
-        </div>
+{
+  !isCv && (
+    <div class="presentation-controls" role="region" aria-label="Controles de presentación">
+      <div class="presentation-hud__progress" aria-live="polite" aria-label="Capítulo actual">
+        <span class="presentation-hud__progress-value" id="presentationProgress">01</span>
+        <span class="presentation-hud__progress-total">/ {String(totalBeats).padStart(2, '0')}</span>
+      </div>
 
-        <button
-          type="button"
-          class="presentation-hud__btn"
-          id="presentationMuteToggle"
-          aria-pressed="true"
-          title="Silenciar ambiente"
-        >
-          MUTE
-        </button>
+      <button
+        type="button"
+        class="presentation-hud__btn"
+        id="presentationQualityToggle"
+        aria-pressed="false"
+        aria-label="Cambiar calidad gráfica"
+        title="Cambiar calidad gráfica"
+      >
+        HQ
+      </button>
 
-        <button
-          type="button"
-          class="presentation-hud__btn"
-          id="presentationQualityToggle"
-          aria-pressed="false"
-          title="Calidad grafica"
-        >
-          QUALITY
-        </button>
+      <button
+        type="button"
+        class="presentation-hud__btn"
+        id="presentationHelpToggle"
+        aria-expanded="false"
+        aria-controls="presentationHelpPanel"
+        aria-label="Mostrar ayuda"
+        title="Ayuda"
+      >
+        ?
+      </button>
 
-        <button
-          type="button"
-          class="presentation-hud__btn"
-          id="presentationHelpToggle"
-          aria-expanded="false"
-          aria-controls="presentationHelpPanel"
-          title="Ayuda"
-        >
-          HELP
-        </button>
-
-        <div class="presentation-hud__help" id="presentationHelpPanel" hidden>
-          <p id="presentationHelpCopy"></p>
-        </div>
-      </>
-    )
-  }
-</div>
+      <div class="presentation-hud__help" id="presentationHelpPanel" hidden>
+        <p id="presentationHelpCopy"></p>
+      </div>
+    </div>
+  )
+}

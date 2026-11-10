@@ -1,7 +1,6 @@
-// Fuente de verdad de la historia: cada capitulo es una etapa real de la
-// trayectoria de Daniel. De aqui se derivan los beats de la presentacion 3D
+// Fuente de verdad de la historia: cada capítulo es una etapa real de la
+// trayectoria de Daniel. De aquí se derivan los beats de la presentación 3D
 // (src/data/presentation.ts) y el timeline del CV (src/data/portfolio.ts).
-// Snapshot curado a partir de GitHub (daniel-baf personal + VantumST agregado).
 
 export type SceneKey =
   | 'intro'
@@ -25,8 +24,6 @@ export interface JourneyLink {
   href: string;
 }
 
-// Burbuja de logro que aparece flotando al activarse el capitulo.
-// `tag` es la etiqueta corta (PR, DEPLOY, REVIEW...) y `text` el logro.
 export interface JourneyHighlight {
   tag: string;
   text: string;
@@ -44,9 +41,8 @@ export interface JourneyDetails {
   link?: JourneyLink;
 }
 
-// El historial disponible confirma 2024 como el primer año profesional. Al no
-// existir mes/dia verificable, la experiencia se expresa por año calendario.
-export const CAREER_START_YEAR = 2024;
+// Julio de 2025 es la primera evidencia profesional verificable del recorrido.
+export const CAREER_START_YEAR = 2025;
 
 export function getProfessionalExperienceYears(currentYear = new Date().getFullYear()) {
   return Math.max(0, currentYear - CAREER_START_YEAR);
@@ -59,18 +55,18 @@ export function formatProfessionalExperience(currentYear = new Date().getFullYea
 
 export interface JourneyChapter {
   id: string;
-  years: string; // display, e.g. "2021 - 2022"
-  yearStart: number; // para orden / anclaje cronologico
-  title: string; // headline (primary)
-  subtitle: string; // secondary
-  narrative: string; // prosa larga, reutilizable en el CV
-  stack: string[]; // tags de tecnologia
+  years: string;
+  yearStart: number;
+  title: string;
+  subtitle: string;
+  narrative: string;
+  stack: string[];
   scene: SceneKey;
-  weight: number; // dwell de scroll (1 = una pantalla)
-  highlights?: JourneyHighlight[]; // burbujas de logros que "venden"
+  weight: number;
+  highlights?: JourneyHighlight[];
   metrics?: JourneyMetric[];
   links?: JourneyLink[];
-  details?: JourneyDetails; // lectura extendida para el timeline del CV
+  details?: JourneyDetails;
   cta?: { label: string; href: string };
 }
 
@@ -79,17 +75,17 @@ export const journey: JourneyChapter[] = [
     id: 'intro',
     years: '',
     yearStart: 2020,
-    title: 'HOLA',
-    subtitle: 'soy Daniel · backend engineer · Guatemala',
+    title: 'DANIEL\nBAUTISTA',
+    subtitle: 'Backend & cloud engineer · plataforma, integraciones y producto',
     narrative:
-      'Daniel Eduardo Bautista Fuentes. Esta es la historia de como pase de los primeros programas en la universidad a construir sistemas en produccion.',
+      'Daniel Eduardo Bautista Fuentes. De los primeros programas universitarios a construir productos, integraciones e infraestructura en producción.',
     stack: [],
     scene: 'intro',
     weight: 1.2,
     highlights: [
-      { tag: 'PRs', text: '140 pull requests' },
-      { tag: 'REVIEWS', text: '~98 code reviews' },
-      { tag: 'COMMITS', text: '681+ commits' },
+      { tag: 'PRs', text: '600+ PRs mergeados' },
+      { tag: 'REVIEWS', text: '140+ PRs revisados' },
+      { tag: 'COMMITS', text: '1,400+ commits' },
     ],
   },
   {
@@ -99,13 +95,13 @@ export const journey: JourneyChapter[] = [
     title: 'FIRST COMPILE',
     subtitle: 'los primeros programas · C# · Java',
     narrative:
-      'Mis primeros repositorios: un simulador de compilador en C# y un resolvedor de sistemas de ecuaciones en Java. El inicio como estudiante de ciencias y sistemas en CUNOC, USAC.',
+      'Mis primeros repositorios: un simulador de compilador en C# y un resolvedor de sistemas de ecuaciones en Java. El inicio como estudiante de Ciencias y Sistemas en CUNOC, USAC.',
     stack: ['C#', 'Java', 'Algoritmos'],
     scene: 'compile',
     weight: 1.1,
     highlights: [
       { tag: 'BUILD', text: 'Simulador de compilador en C#' },
-      { tag: 'CODE', text: 'Resolucion de sistemas en Java' },
+      { tag: 'CODE', text: 'Matrix-solver en Java' },
     ],
     metrics: [{ value: '2020', label: 'primer commit' }],
   },
@@ -113,35 +109,19 @@ export const journey: JourneyChapter[] = [
     id: 'datastructures',
     years: '2021 - 2022',
     yearStart: 2021,
-    title: 'ESTRUCTURAS',
-    subtitle: 'AVL · grafos · juegos · Java pesado',
+    title: 'ESTRUCTURAS Y LENGUAJES',
+    subtitle: 'AVL · juegos · compiladores · algoritmos',
     narrative:
-      'La etapa de estructuras de datos: arboles AVL, grafos, lenguajes graficos, juegos como HorseRaces y GameOf15, un sistema de control de mobiliario y una app de revistas. Aqui solidifique algoritmos y POO.',
-    stack: ['Java', 'AVL Trees', 'Grafos', 'POO', 'C++'],
+      'Árboles AVL, juegos, un detector de plagio y cuatro compiladores. Entre los nueve proyectos de esta etapa consolidé algoritmos, programación orientada a objetos y los fundamentos de lenguajes.',
+    stack: ['Java', 'C++', 'TypeScript', 'Compiladores'],
     scene: 'datastructures',
     weight: 1.3,
     highlights: [
-      { tag: 'BUILD', text: 'Arboles AVL y grafos desde cero' },
-      { tag: 'CODE', text: '6+ proyectos: juegos y motores' },
-      { tag: 'OPT', text: 'Estructuras eficientes en memoria' },
+      { tag: 'BUILD', text: 'Árboles AVL y estructuras desde cero' },
+      { tag: 'CODE', text: '4 compiladores y detector de plagio' },
+      { tag: 'BASE', text: '9+ proyectos académicos' },
     ],
-    metrics: [{ value: '6+', label: 'proyectos academicos' }],
-  },
-  {
-    id: 'web',
-    years: '2022',
-    yearStart: 2022,
-    title: 'LA WEB',
-    subtitle: 'Angular · TypeScript · primer compilador web',
-    narrative:
-      'Mi salto a la web: un compilador construido con Angular con analisis lexico, sintactico y generacion de codigo. El primer contacto serio con TypeScript y el frontend.',
-    stack: ['TypeScript', 'Angular', 'Compiladores'],
-    scene: 'web',
-    weight: 1.1,
-    highlights: [
-      { tag: 'BUILD', text: 'Compilador web en Angular' },
-      { tag: 'CODE', text: 'Analisis lexico + sintactico + codegen' },
-    ],
+    metrics: [{ value: '9+', label: 'proyectos académicos' }],
     links: [{ label: 'web-compiler', href: 'https://github.com/daniel-baf/web-compiler' }],
   },
   {
@@ -149,31 +129,34 @@ export const journey: JourneyChapter[] = [
     years: '2023',
     yearStart: 2023,
     title: 'BAJO NIVEL',
-    subtitle: 'Assembly · arquitectura del computador',
+    subtitle: 'Assembly · arquitectura · cambio a la URL',
     narrative:
-      'Bajando hasta el metal: programas en ensamblador para Arquitectura del Computador 1, conversores de sistemas numericos y fundamentos de como funciona la maquina por dentro.',
-    stack: ['Assembly', 'x86', 'Python'],
+      'Programas en ensamblador, arquitectura del computador y conversión de sistemas numéricos. Comprender la máquina por dentro mientras daba el paso de USAC a Universidad Rafael Landívar.',
+    stack: ['Assembly', 'x86', 'Python', 'Arquitectura'],
     scene: 'lowlevel',
     weight: 1.1,
     highlights: [
-      { tag: 'OPT', text: 'Optimizacion a nivel de registros' },
-      { tag: 'CODE', text: 'Ensamblador x86 + conversores numericos' },
+      { tag: 'LOW', text: 'Programas en ensamblador' },
+      { tag: 'CODE', text: 'Arquitectura y sistemas numéricos' },
+      { tag: 'NEXT', text: 'Nueva etapa en la URL' },
     ],
+    links: [{ label: 'arqui-1-assembler', href: 'https://github.com/daniel-baf/arqui-1-assembler' }],
   },
   {
     id: 'oracle',
     years: '2024',
     yearStart: 2024,
     title: 'BACKEND',
-    subtitle: 'Oracle ONE · Java · APIs · datos',
+    subtitle: 'Oracle ONE · Java · APIs REST · datos',
     narrative:
-      'Entrenamiento backend estructurado con el programa Oracle Next Education (ONE): desafios y aplicaciones Java, diseno de APIs e integracion con bases de datos para sistemas empresariales.',
+      'Formación backend estructurada con Oracle Next Education: aplicaciones Java, diseño de APIs REST e integración con bases de datos. La base para convertir la programación en sistemas completos.',
     stack: ['Java', 'REST APIs', 'SQL', 'Oracle ONE'],
     scene: 'oracle',
     weight: 1.1,
     highlights: [
-      { tag: 'API', text: 'Diseno de APIs REST' },
-      { tag: 'DATA', text: 'Integracion con bases de datos' },
+      { tag: 'API', text: 'Diseño de APIs REST' },
+      { tag: 'DATA', text: 'Integración con bases de datos' },
+      { tag: 'LEARN', text: 'Oracle Next Education' },
     ],
     links: [{ label: 'ONE-G7', href: 'https://github.com/daniel-baf/ONE-G7-daniel-baf' }],
   },
@@ -181,131 +164,144 @@ export const journey: JourneyChapter[] = [
     id: 'network',
     years: '2025',
     yearStart: 2025,
-    title: 'LIDERAZGO',
-    subtitle: 'project lead · freelance · entrega end-to-end',
+    title: 'PRIMEROS SISTEMAS REALES',
+    subtitle: 'Business intelligence · nómina · producto',
     narrative:
-      'Coordinación de equipo, gestión de tickets y evaluación técnica de talento. En paralelo, freelance: sistema de cálculo de vigas estructurales para ingeniería civil, ERP para ONG, autenticación JWT/CORS y más, con entrega directa al cliente.',
-    stack: ['Python', 'Django', 'JWT', 'JavaScript', 'Project Lead'],
+      'Mi primera etapa profesional: creé Euro BI con BigQuery y Gemini para analizar ventas y participé en la nómina guatemalteca de un ERP escolar. Datos, reglas de negocio y despliegues para usuarios reales.',
+    stack: ['FastAPI', 'React', 'BigQuery', 'Gemini', 'Cloud Run'],
     scene: 'network',
     weight: 1.3,
     highlights: [
-      { tag: 'LEAD', text: 'Lideré entrega end-to-end' },
-      { tag: 'REVIEW', text: 'Evaluación técnica de talento' },
-      { tag: 'SHIP', text: 'ERP para ONG + cálculo estructural' },
+      { tag: 'BI', text: 'Euro BI con BigQuery + Gemini' },
+      { tag: 'SHIP', text: 'Nómina guatemalteca en ERP escolar' },
+      { tag: 'CLOUD', text: 'Aplicaciones desplegadas en Cloud Run' },
     ],
     metrics: [{ value: formatProfessionalExperience(), label: 'experiencia profesional' }],
     details: {
       intro:
-        'En 2025 mi trabajo dejó de ser solo ejecutar tareas: empecé a coordinar entregas, convertir objetivos ambiguos en tickets accionables y sostener la calidad técnica durante todo el ciclo.',
+        'En julio de 2025 comencé a convertir necesidades de empresas en software operativo: primero inteligencia de negocio sobre ventas y después reglas de nómina dentro de un ERP escolar.',
       sections: [
         {
-          title: 'Coordinación y criterio técnico',
+          title: 'Euro BI: datos e IA aplicada',
           copy:
-            'Acompañé la planificación del equipo, el seguimiento de tickets y la evaluación técnica de talento. Mi foco fue mantener claridad sobre responsables, alcance y condiciones de entrega, sin separar la coordinación de las decisiones de ingeniería.',
+            'Creé una aplicación de inteligencia de negocio para una empresa de materiales de construcción. FastAPI y React conectan BigQuery y Gemini para explorar información de ventas, con Firebase y despliegue en Cloud Run.',
         },
         {
-          title: 'Entrega directa',
+          title: 'Nómina guatemalteca',
           copy:
-            'En paralelo construí soluciones freelance de punta a punta: un sistema de cálculo de vigas para ingeniería civil y un ERP para una ONG, además de flujos de autenticación JWT/CORS. Esa cercanía con usuarios y clientes reforzó mi capacidad de traducir necesidades reales en software útil.',
+            'Trabajé períodos con auditoría, ISR, prestaciones, Bono 14, aguinaldo, embargos y liquidaciones. También corregí falsos positivos del OCR de DTEs y desarrollé funcionalidades de gestión de personal.',
         },
       ],
       outcomes: [
-        'Gestión de trabajo técnico con foco en alcance y entrega.',
-        'Evaluación de talento y acompañamiento de decisiones técnicas.',
-        'Responsabilidad end-to-end, desde el problema hasta la puesta en uso.',
+        'Primer sistema profesional construido de punta a punta.',
+        'Modelos de datos y reglas de negocio aplicados a operaciones reales.',
+        'Experiencia inicial con analítica, IA y servicios administrados de GCP.',
       ],
     },
   },
   {
     id: 'cloud',
-    years: '2025 - presente',
-    yearStart: 2025,
+    years: '2026 H1',
+    yearStart: 2026,
     title: 'PRODUCCIÓN',
-    subtitle: 'VantumST · GCP · Docker · CI/CD',
+    subtitle: 'Vantum ST · producto + integraciones · GCP',
     narrative:
-      'Backend engineer en VantumST: software e infraestructura en producción, automatización de despliegues y un trabajo transversal para convertir prácticas probadas del equipo en estándares de ingeniería, revisión y entrega.',
-    stack: ['GCP', 'Docker', 'CI/CD', 'TypeScript', 'Python', 'PHP'],
+      'Me hice cargo del CRM de admisiones de un colegio, construí un helpdesk SaaS multi-tenant y creé el gateway de WhatsApp de la empresa. En paralelo, mi primer PR en Engram fue mergeado.',
+    stack: ['FastAPI', 'Django', 'TypeScript', 'React', 'BullMQ', 'Terraform'],
     scene: 'cloud',
     weight: 1.5,
     highlights: [
-      { tag: 'PRs', text: '94 PRs en producción · 79 merged' },
-      { tag: 'REVIEW', text: '84 code reviews' },
-      { tag: 'DEPLOY', text: 'Automaticé despliegues en GCP' },
-      { tag: 'INFRA', text: 'Docker + pipelines CI/CD' },
-      { tag: 'SCALE', text: '13 proyectos en producción' },
+      { tag: 'CRM', text: '188 PRs mergeados · producto revendible' },
+      { tag: 'SAAS', text: 'Helpdesk multi-tenant · 110 PRs mergeados' },
+      { tag: 'QUEUE', text: 'Gateway WhatsApp · 68 PRs mergeados' },
+      { tag: 'OSS', text: 'Engram #493 mergeado' },
     ],
     metrics: [
-      { value: '13', label: 'proyectos en producción' },
-      { value: 'GCP', label: 'infraestructura cloud' },
+      { value: '3', label: 'productos centrales en producción' },
+      { value: '#493', label: 'primer PR en Engram' },
     ],
     details: {
       intro:
-        'Estudié cómo Vantum diseñaba, construía, revisaba y desplegaba software en proyectos reales. A partir de esa evidencia consolidé una guía normativa para que las decisiones repetibles dejaran de depender de memoria individual y pudieran discutirse con criterios objetivos.',
+        'La primera mitad de 2026 marcó el salto a productos completos: arquitectura de backend, frontend, integraciones, seguridad, pruebas y operación cloud como una sola responsabilidad.',
       sections: [
         {
-          title: 'De prácticas reales a estándar',
+          title: 'CRM de admisiones',
           copy:
-            'El trabajo no consistió en inventar reglas aisladas. Comparé patrones usados en producción y definí un criterio de graduación: una práctica debe estar probada, ser generalizable y poder expresarse como una regla accionable. El resultado cubre UI, arquitectura, APIs, bases de datos y operación.',
+            'Autor principal y luego único mantenedor del CRM de un colegio privado K-12: 200 PRs propios y 188 mergeados. Reorganicé el backend por dominios, tipé el contrato OpenAPI, integré Odoo y mensajería, y convertí el sistema en un producto configurable para otros colegios.',
         },
         {
-          title: 'Revisión de código y Pull Requests',
+          title: 'Helpdesk SaaS multi-tenant',
           copy:
-            'Documenté unidades de cambio revisables, Conventional Commits, issue primero, PRs de una sola intención y un objetivo de hasta 400 líneas. También establecí hooks versionados, tests de flujos críticos, aprobación humana y revisión automatizada contra criterios verificables.',
+            'Construí desde cero una plataforma con portal de clientes, RBAC, SLA con pausas, CSAT, widget embebido y bot de WhatsApp. Migramos el frontend a React + MUI; alcancé 110 PRs mergeados de 112 propios.',
         },
         {
-          title: 'CI/CD como contrato de entrega',
+          title: 'Gateway de WhatsApp',
           copy:
-            'Unifiqué los comandos locales y de CI mediante Makefiles, con lint, typecheck y tests como controles compartidos. La guía separa develop como integración y main como entrega, y documenta despliegues disparados por Cloud Build hacia Cloud Run en lugar de comandos manuales.',
+            'Creé un gateway para Meta Cloud API y Evolution con colas durables por tenant, Redis/BullMQ, callbacks firmados con HMAC y protección anti-SSRF. Las colas toleran aproximadamente un día sin consumidor; 68 de mis 72 PRs fueron mergeados.',
         },
       ],
       outcomes: [
-        'Repositorio normativo con reglas respaldadas por código en producción.',
-        'Plantillas de issues y PRs con validaciones y etiquetado automatizado.',
-        'Definition of Done común para calidad, seguridad, pruebas y documentación.',
-        'Base reutilizable para onboarding y revisiones con menos ambigüedad.',
+        'Productos usados en producción, no solo entregas aisladas.',
+        'Integraciones de mensajería confiables y auditables.',
+        'Infraestructura GCP y Terraform incorporada al ciclo de producto.',
+        'Primera contribución open source mergeada en Engram.',
       ],
+      link: {
+        label: 'Ver PR #493 en Engram',
+        href: 'https://github.com/Gentleman-Programming/engram/pull/493',
+      },
     },
   },
   {
     id: 'ai',
-    years: '2026',
+    years: '2026 H2',
     yearStart: 2026,
-    title: 'ERA IA',
-    subtitle: 'ENGRAM · Go · MCP · agentes con contexto',
+    title: 'PLATAFORMA',
+    subtitle: '12 sistemas · Terraform · tooling · open source',
     narrative:
-      'La IA se convirtió en una capa de ingeniería: memoria persistente, agentes con contexto, MCPs y flujos verificables. En ENGRAM aporté un registro declarativo de agentes que convirtió una configuración rígida en un sistema guiado por datos.',
-    stack: ['Go', 'SQLite', 'MCP', 'LLMs', 'Three.js'],
+      'Producto y plataforma a escala de equipo: FEL desacoplada, verticales Odoo 18, Terraform, CLI interno y skills de IA. SIGA llegó a producción y sumé siete contribuciones externas en Go, kernel y MCP.',
+    stack: ['Odoo 18', 'Terraform', 'GCP', 'Python', 'Go', 'MCP'],
     scene: 'ai',
-    weight: 1.4,
+    weight: 1.5,
     highlights: [
-      { tag: 'PR', text: '#493 mergeado en ENGRAM' },
-      { tag: 'DATA', text: 'Registro declarativo de agentes' },
-      { tag: 'FLOW', text: 'MCP + workflows con contexto' },
+      { tag: 'PRs', text: '601 PRs mergeados · 24 repos' },
+      { tag: 'REVIEW', text: '121 PRs de compañeros revisados' },
+      { tag: 'SCALE', text: '12 sistemas en producción' },
+      { tag: 'OSS', text: '7 PRs externos mergeados' },
     ],
-    metrics: [{ value: 'AI', label: 'workflows asistidos' }],
+    metrics: [
+      { value: '#1', label: 'contribuidor en 21 de 24 repos' },
+      { value: '12', label: 'sistemas en producción' },
+    ],
     details: {
       intro:
-        'En esta etapa uso IA como parte de un sistema de trabajo, no como un atajo para generar código. El objetivo es conservar contexto, hacer explícitas las decisiones y conectar investigación, implementación y verificación.',
+        'En la segunda mitad de 2026 el foco se amplió: además de construir productos, convertí prácticas repetibles en plataforma, herramientas y estándares que otras personas pudieran usar.',
       sections: [
         {
-          title: 'Aporte a ENGRAM: configuración guiada por datos',
+          title: 'FEL y verticales Odoo 18',
           copy:
-            'En el PR #493 reemplacé una configuración basada en un switch de instaladores por un registro declarativo de agentes y un controlador genérico. El resultado convierte agregar compatibilidad con un nuevo agente en, principalmente, un cambio de datos y mantiene los casos especiales explícitos.',
+            'Diseñé una interfaz de facturación electrónica independiente del certificador y ejecuté el cambio de InFile a Digifact en producción. También construí funcionalidades académicas y financieras, conectores firmados y despliegues para verticales de colegios, una agencia de viajes y una empresa de materiales.',
         },
         {
-          title: 'Flujos con agentes',
+          title: 'Plataforma y experiencia de desarrollo',
           copy:
-            'Trabajo con ENGRAM, una herramienta de memoria persistente para agentes de código construida con Go y SQLite. Su integración mediante MCP recupera decisiones y aprendizajes entre sesiones; la IA ayuda a explorar, implementar y verificar, mientras las reglas, evidencia y pruebas siguen siendo la autoridad.',
+            'Llevé Terraform, Cloud Run, Workload Identity Federation y releases automáticos a los productos. Creé vantum-cli con 139 tests bats para sincronizar Secret Manager, además de vantum-tools y guías de ingeniería y diseño adoptadas por el equipo.',
+        },
+        {
+          title: 'SIGA y open source',
+          copy:
+            'Como tech lead de SIGA-INEBI combiné planificación, backend, frontend y DevOps hasta su puesta en producción. En open source sumé cinco PRs en Engram, LenovoLegionLinux #563 y MCP-Packet-Tracer #20.',
         },
       ],
       outcomes: [
-        'PR #493 mergeado: registro declarativo y setup nativo para nuevos agentes.',
-        'Integraciones MCP y workflows de agentes con contexto recuperable.',
-        'Automatización con controles de calidad y trazabilidad explícitos.',
+        '601 PRs mergeados y 121 PRs de compañeros revisados en Vantum.',
+        'Contribuidor #1 en 21 de 24 repositorios de la organización.',
+        'Herramientas internas verificables y adoptadas por el equipo.',
+        'Siete PRs open source externos mergeados.',
       ],
       link: {
-        label: 'Ver PR #493 en ENGRAM',
-        href: 'https://github.com/Gentleman-Programming/engram/pull/493',
+        label: 'Ver SIGA-INEBI en GitHub',
+        href: 'https://github.com/siga-inebi/siga-inebi',
       },
     },
   },
@@ -315,7 +311,8 @@ export const journey: JourneyChapter[] = [
     yearStart: 2026,
     title: 'GRACIAS',
     subtitle: 'por recorrer la historia',
-    narrative: 'Gracias por llegar hasta aqui. Si tienes un proyecto, hablemos.',
+    narrative:
+      'Backend, cloud, producto y open source. Si tienes un problema real que convertir en software, hablemos.',
     stack: [],
     scene: 'outro',
     weight: 1,

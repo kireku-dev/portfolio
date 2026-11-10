@@ -5,6 +5,7 @@ export type { SceneKey } from './journey';
 
 export interface PresentationBeat {
   id: string;
+  years: string;
   primary: string;
   secondary: string;
   scene: SceneKey;
@@ -14,16 +15,17 @@ export interface PresentationBeat {
 }
 
 export const presentationMeta = {
-  title: 'Daniel Bautista | Dev Presentation',
+  title: 'Daniel Bautista | Ingeniería en movimiento',
   description:
-    'Presentacion scroll-driven con WebGL: backend engineer, cloud y sistemas confiables.',
-  loadingCopy: 'initializing webgl pipeline...',
-  helpCopy: 'Usa scroll, flechas arriba/abajo o toca la parte superior/inferior de la pantalla.',
+    'Un recorrido cinematográfico en 3D por la trayectoria de Daniel Bautista: backend, cloud y sistemas confiables.',
+  loadingCopy: 'Preparando la experiencia 3D',
+  helpCopy: 'Desplázate para recorrer la historia. También puedes usar las flechas o las teclas Page Up y Page Down.',
 };
 
 // Los beats son una proyeccion de los capitulos de `journey` (fuente de verdad).
 export const presentationBeats: PresentationBeat[] = journey.map((chapter) => ({
   id: chapter.id,
+  years: chapter.years,
   primary: chapter.title,
   secondary: chapter.subtitle,
   scene: chapter.scene,
