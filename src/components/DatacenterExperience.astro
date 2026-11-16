@@ -1,0 +1,171 @@
+---
+// Interactive figure: rack kr-01 with server 07 pulled out on its slides.
+// Geometry is computed once at build time with the anatomy kit (MIT, see
+// src/experience/anatomy/LICENSE); the client script only turns, slides and blinks it.
+import { datacenterFigure } from '../experience/datacenter/render.mjs';
+import { stateAt, loadAt, readoutOf, detailOf } from '../experience/datacenter/model.mjs';
+
+const figure = datacenterFigure();
+const initial = stateAt(loadAt(0));
+const controls =
+  'Rack kr-01, figura interactiva. Arrastra o usa las flechas izquierda y derecha para girar el rack; Enter o espacio saca o guarda el servidor 07; Inicio vuelve a la posición de reposo.';
+---
+
+<figure class="dcx iso" data-theme="dark">
+  <div class="dcx-plate">
+    <div class="dcx-row dcx-head" aria-hidden="true">
+      <span class="dcx-fig">Fig 01</span>
+      <span class="dcx-title">Rack kr-01 / sled 07</span>
+    </div>
+    <div
+      class="dcx-stage iso-turn"
+      tabindex="0"
+      role="slider"
+      aria-roledescription="figura interactiva"
+      aria-label={controls}
+      aria-valuemin={figure.data.range[0]}
+      aria-valuemax={figure.data.range[1]}
+      aria-valuenow="0"
+      aria-valuetext="Servidor 07 dentro del rack; giro 0 grados"
+      style={`aspect-ratio:${figure.width}/${figure.height}`}
+      set:html={figure.markup}
+    />
+    <div class="dcx-row dcx-foot">
+      <span class="dcx-hint" aria-hidden="true"><span class="dcx-hint-hover">Pasa el cursor para abrir · arrastra para girar</span><span class="dcx-hint-touch">Toca para abrir · arrastra para girar</span></span>
+      <span class="dcx-readout" data-readout aria-hidden="true">{readoutOf(initial, 0)}</span>
+    </div>
+    <p class="dcx-sr" data-announce aria-live="polite"></p>
+  </div>
+  <figcaption class="dcx-caption">
+    <span class="dcx-detail" data-detail>{detailOf(initial)}</span>
+    <span>Seis ventiladores empujan el aire de los discos hacia las fuentes; el controlador sube las rpm con la carga para que el aire salga como mucho 15 °C más caliente de lo que entra.</span>
+    <span class="dcx-keys">
+      <span class="dcx-key"><i class="dcx-swatch" data-mark="lit"></i>Disipadores de las CPU</span>
+      <span class="dcx-key"><i class="dcx-swatch" data-mark="led"></i>Actividad de puertos y discos</span>
+    </span>
+  </figcaption>
+  <script type="application/json" data-dcx set:html={JSON.stringify(figure.data)} />
+</figure>
+
+<Fragment set:html={`<style>${figure.css}</style>`} />
+
+<style is:global>
+  /* Brand tokens mapped onto the anatomy ramp: blue-black tones, aqua as the one lit accent. */
+  .dcx.iso {
+    --anatomy-page: #0a0c10;
+    --anatomy-card: #10141c;
+    --anatomy-text: #c6cdd8;
+    --anatomy-strong: #f4f7fc;
+    --anatomy-muted: #67707f;
+    --anatomy-paper: #10141c;
+    --anatomy-face: #171d29;
+    --anatomy-top: #182030;
+    --anatomy-shade-0: #0b0e14;
+    --anatomy-shade-1: #0e121a;
+    --anatomy-shade-2: #111621;
+    --anatomy-shade-3: #141a27;
+    --anatomy-lit-top: #13213a;
+    --anatomy-lit-shade: #0f1a2e;
+    --anatomy-hi: #c6cdd8;
+    --anatomy-mid: #5d6676;
+    --anatomy-lo: #343d4d;
+    --anatomy-faint: #1e2635;
+    --anatomy-lit: #00ffff;
+    --anatomy-halo: #2e5bff;
+    --anatomy-halo-opacity: 0.1;
+    --anatomy-dot: #f4f7fc;
+    --anatomy-weight: 0.7px;
+    --anatomy-mono: var(--mono, 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace);
+    margin: 0;
+    width: 100%;
+    max-width: 760px;
+    color: var(--anatomy-text);
+    font-family: var(--anatomy-mono);
+  }
+  .dcx .dcx-plate {
+    position: relative;
+    background: var(--anatomy-card);
+    border: 1px solid #1e2635;
+    border-radius: 2px;
+    padding: 16px 18px 14px;
+  }
+  .dcx .dcx-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 10.5px;
+    line-height: 16px;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  .dcx .dcx-fig { color: var(--anatomy-text); }
+  .dcx .dcx-title,
+  .dcx .dcx-hint { color: var(--anatomy-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .dcx .dcx-readout { color: var(--anatomy-text); font-variant-numeric: tabular-nums; }
+  .dcx .dcx-hint { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .dcx .dcx-hint-touch { display: none; }
+  @media (hover: none) and (pointer: coarse) {
+    .dcx .dcx-hint-hover { display: none; }
+    .dcx .dcx-hint-touch { display: inline; }
+  }
+  .dcx .dcx-stage {
+    position: relative;
+    width: 100%;
+    margin: 6px 0;
+    touch-action: pan-y;
+    cursor: grab;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .dcx .dcx-stage[data-drag] { cursor: grabbing; }
+  .dcx .dcx-stage:focus-visible { outline: 1px solid #00ffff; outline-offset: 4px; }
+  .dcx .dcx-stage > svg { display: block; width: 100%; height: 100%; }
+  .dcx .dcx-halo { filter: blur(18px); }
+  .dcx .dcx-led-core { fill: #00ffff; }
+  .dcx .dcx-led-glow { fill: #2e5bff; opacity: 0.32; }
+  .dcx .dcx-led[data-kind='power'] .dcx-led-core,
+  .dcx .dcx-led[data-kind='status'] .dcx-led-core,
+  .dcx .dcx-led[data-kind='fan'] .dcx-led-core { fill: #f4f7fc; }
+  .dcx .dcx-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .dcx .dcx-caption {
+    display: grid;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--anatomy-muted);
+  }
+  .dcx .dcx-detail { color: var(--anatomy-text); font-variant-numeric: tabular-nums; min-height: 1.5em; }
+  .dcx .dcx-keys { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+  .dcx .dcx-key { display: inline-flex; align-items: center; gap: 8px; }
+  .dcx .dcx-swatch { display: inline-block; width: 14px; height: 8px; border: 1px solid #00ffff; border-radius: 0; }
+  .dcx .dcx-swatch[data-mark='led'] { width: 6px; height: 6px; border: 0; background: #00ffff; border-radius: 50%; }
+  .dcx .dcx-plate { container-type: inline-size; }
+  /* Narrow plates (the landing hero column, phones): hint above readout, never truncated. */
+  @container (max-width: 720px) {
+    .dcx .dcx-foot { flex-direction: column; align-items: flex-start; gap: 2px; }
+  }
+  @media (max-width: 560px) {
+    .dcx .dcx-plate { padding: 12px 10px 12px; overflow: hidden; }
+    .dcx .dcx-detail { min-height: 3em; }
+    .dcx .dcx-foot { flex-direction: column; gap: 2px; }
+    .dcx .dcx-stage { width: 112%; margin: 6px -6%; }
+  }
+</style>
+
+<script>
+  import { mountDatacenter } from '../experience/datacenter/live.js';
+
+  const start = () => document.querySelectorAll<HTMLElement>('.dcx').forEach((root) => mountDatacenter(root));
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true });
+  else start();
+</script>

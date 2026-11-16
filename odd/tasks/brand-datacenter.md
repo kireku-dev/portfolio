@@ -14,12 +14,14 @@ Assumption: dark-only (the light/dark toggle is removed) because the brand is da
 
 ## Tasks
 
-- T1 (S2, S3) — inline — delete presentation, CV → `/`, redirect `/cv` → `/`. Status: pending
-- T2 (S1) — inline — brand restyle of layout, CSS and components. Status: pending
-- T3 (S4) — delegated (Writer trigger a: parallel independent unit, disjoint surface `src/experience/**`, `src/components/DatacenterExperience.astro`) — anatomy datacenter figure. Status: pending
-- T4 (S1, S4) — inline — mount figure in hero, final build + screenshots. Status: pending
+- T1 (S2, S3) — inline — delete presentation, CV → `/`, redirect `/cv` → `/`. Status: done — commit 19fa601
+- T2 (S1) — inline — brand restyle of layout, CSS and components. Status: done — commit 19fa601
+- T3 (S4) — delegated (Writer trigger a: parallel independent unit, disjoint surface `src/experience/**`, `src/components/DatacenterExperience.astro`) — anatomy datacenter figure. Status: done — commit (see L4)
+- T4 (S1, S4) — inline — mount figure in hero, final build + screenshots. Status: done — commit (see L4)
 
 ## Log
 
 - L1 (2026-11-16): "vamos a refactorizar la UI usando una guia que he generado de marca. /home/daniel/Downloads/kireku-brand-kit.zip quiero algo mas oscuro y minimalista, ayudame aplicando y de paso hagamos algo BORRA la interactiva, no la uso, me gusta mas la de cv. Asi que esa va a pasar a ser la landing digamos para mi portfolio, pero si quiero una interaccion 3D como si fuera una experiencia, quiero que hagamos un servidor por dentro (un datacenter) usa https://github.com/wheresryan22/anatomy para el dise;o del modelo 3D"
 - L2: anatomy is an MIT isometric SVG kit (+ beta 3D "turn" mode), framework-free, Node build writes SVG strings. Plan: vendor the kit, compute the figure at build time in Astro frontmatter, live motion in a client script.
+- L3: T1+T2 done in 19fa601. Removed presentation, three/gsap/lenis, dead JS (theme toggle, cv-intro, typewriter, terminal writer), old style.css/cv.css; new public/assets/css/site.css. Checks: `npm run build` OK (2 routes, /cv meta-refresh redirect); headless screenshots at 1440 and 390 reviewed; fixed empty grid cell painted with line colour and stretched "Ver más".
+- L4: T3 delivered by writer: rack kr-01 (12U) on a turntable, server 07 on telescopic slides, ~154 authored parts, anatomy 3D turn mode (±27° drag), hover/tap opens the sled, keyboard, idle tour, live model readout. Writer checks: kit audit passed; lines.mjs 0 in 4 poses; turn-check lines 0 at 24 angles; pops first-difference 0 (second-difference run crashed, incomplete); quick orbit audit leaves 1 swap + continuity births at unreachable angles; perf ~9.8 ms/frame desktop, ~43 ms on throttled phone. T4: mounted as NavHeroSection slot; foot row stacks via container query (<=720px) so the hint is never truncated; build OK; hero screenshots desktop/phone and idle-tour frames reviewed. Page: index.html 576 KB (130 KB gzip) + 78 KB client JS.
