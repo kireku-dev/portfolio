@@ -2,51 +2,43 @@
 interface Props {
   title: string;
   description: string;
-  mode: 'presentation' | 'cv';
 }
 
-const { title, description, mode } = Astro.props;
+const { title, description } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!doctype html>
-<html lang="es" data-theme="terminal-mando" data-color-mode="dark">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="author" content="Daniel Eduardo Bautista Fuentes" />
+    <meta name="theme-color" content="#0A0C10" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="canonical" href={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(`${base}/assets/brand/kireku-isotipo.png`, Astro.site).href} />
     <title>{title}</title>
 
-    <script is:inline>
-      {`(() => {
-        try {
-          const saved = localStorage.getItem('portfolio-color-mode');
-          const mode = saved === 'light' || saved === 'dark' ? saved : 'dark';
-          document.documentElement.dataset.colorMode = mode;
-        } catch {
-          document.documentElement.dataset.colorMode = 'dark';
-        }
-      })();`}
-    </script>
-
+    <link rel="icon" type="image/svg+xml" href={`${base}/assets/brand/favicon.svg`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href={`${base}/assets/css/style.css`} />
-    {mode === 'presentation' && <link rel="stylesheet" href={`${base}/assets/css/presentation.css`} />}
-    {mode === 'cv' && <link rel="stylesheet" href={`${base}/assets/css/cv.css`} />}
+    <link rel="stylesheet" href={`${base}/assets/css/site.css`} />
   </head>
-  <body data-mode={mode}>
+  <body>
+    <a class="skip-link" href="#about">Saltar al contenido</a>
     <slot />
-
-    {mode === 'cv' && <script type="module" src={`${base}/assets/js/main.js`}</script>}
+    <script type="module" src={`${base}/assets/js/main.js`}></script>
   </body>
 </html>

@@ -11,69 +11,54 @@ interface Props {
 
 const { navLinks, hero } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const primaryLinks = navLinks.filter((link) => ['#about', '#career', '#projects', '#contact'].includes(link.href));
+const navLabels: Record<string, string> = {
+  '#about': 'Perfil',
+  '#career': 'Experiencia',
+  '#projects': 'Proyectos',
+  '#talks': 'Charlas',
+  '#contact': 'Contacto',
+};
+const primaryLinks = navLinks.filter((link) => link.href in navLabels);
 ---
 
-<nav id="navbar" class="cv-nav" aria-label="Navegación principal">
-  <a href={`${base}/`} class="nav-logo" aria-label="Volver a la experiencia 3D">
-    <span class="nav-logo__mark">DB</span>
-    <span class="nav-logo__name">Daniel Bautista</span>
+<nav id="navbar" class="site-nav" aria-label="Navegación principal">
+  <a href={`${base}/`} class="brand" aria-label="Daniel Bautista — inicio">
+    <img src={`${base}/assets/brand/kireku-isotipo.svg`} alt="" width="24" height="24" />
+    <span>daniel bautista<b aria-hidden="true">.</b></span>
   </a>
 
   <ul class="nav-links">
-    {primaryLinks.map((link) => <li><a href={link.href} id={link.id}>{link.label}</a></li>)}
+    {primaryLinks.map((link) => <li><a href={link.href} id={link.id}>{navLabels[link.href]}</a></li>)}
   </ul>
 
-  <div class="cv-nav__actions">
-    <a href={`${base}/`} class="cv-nav__action">Experiencia 3D</a>
-    <button type="button" class="cv-nav__action cv-nav__print" id="cta-print-cv">Imprimir</button>
-    <button
-      class="color-mode-toggle"
-      type="button"
-      aria-label="Activar tema claro"
-      aria-pressed="false"
-      data-theme-toggle
-    >
-      <span aria-hidden="true" data-theme-toggle-icon>☼</span>
-      <span data-theme-toggle-label>Tema claro</span>
-    </button>
-  </div>
+  <button type="button" class="nav-action" id="cta-print-cv">Imprimir CV</button>
 </nav>
 
-<header id="hero" role="banner" data-scene="core">
-  <div class="hero-content">
-    <div class="hero-main">
-      <div class="hero-copy">
-        <p class="hero-tag"><span>Curriculum vitae</span> Guatemala · 2026</p>
-        <h1 class="hero-name">Daniel <span>Bautista.</span></h1>
-        <p class="hero-title">Backend & Cloud Engineer <span>· Plataforma, integraciones y producto</span></p>
-        <p class="hero-summary">{hero.summary}</p>
+<header id="hero" class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow"><span class="tick" aria-hidden="true"></span>Curriculum vitae <b>/</b> Guatemala · 2026</p>
+    <h1 class="hero-name">{hero.name}<span class="hero-name__dot" aria-hidden="true"></span></h1>
+    <p class="hero-title">Backend &amp; Cloud Engineer <em>— plataforma, integraciones y producto</em></p>
+    <p class="hero-summary">{hero.summary}</p>
 
-        <div class="hero-metrics" aria-label="Resumen profesional">
-          {hero.metrics.map((metric) => (
-            <div class="metric">
-              <span class="metric-value">{metric.value}</span>
-              <span class="metric-label">{metric.label}</span>
-            </div>
-          ))}
-        </div>
-
-        <div class="hero-cta">
-          <a href="#projects" class="btn btn-primary" id="cta-projects">Ver proyectos <span aria-hidden="true">↘</span></a>
-          <a href="#contact" class="btn btn-outline" id="cta-contact">Hablemos</a>
-        </div>
-      </div>
-
-      <div class="hero-visual" aria-hidden="true">
-        <span>Objeto 01 / WebGL</span>
-        <span>Mueve el cursor para rotar</span>
-      </div>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary" id="cta-projects">Ver proyectos <span aria-hidden="true">↘</span></a>
+      <a href="#contact" class="btn" id="cta-contact">Hablemos</a>
     </div>
   </div>
 
-  <a class="scroll-indicator" href="#about" aria-label="Ir al contenido del CV">
-    <span>Explorar CV</span>
-    <span class="scroll-indicator__line" aria-hidden="true"></span>
-    <span aria-hidden="true">↓</span>
-  </a>
+  <div class="hero-visual">
+    <slot />
+  </div>
+
+  <dl class="hero-metrics" aria-label="Resumen profesional">
+    {
+      hero.metrics.map((metric) => (
+        <div class="metric">
+          <dt class="metric-label">{metric.label}</dt>
+          <dd class="metric-value">{metric.value}</dd>
+        </div>
+      ))
+    }
+  </dl>
 </header>

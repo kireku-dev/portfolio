@@ -45,7 +45,7 @@ export const portfolioData = {
   },
   about: {
     sectionLabel: '// 01 > about.exe',
-    sectionTitle: 'SOBRE MÍ',
+    sectionTitle: 'Sobre mí',
     paragraphs: [
       `Soy Daniel Eduardo Bautista Fuentes, backend y cloud engineer de Guatemala. Tengo ${professionalExperience} de experiencia profesional y soy el principal contribuidor de Vantum ST, con cerca del 60 % de los PRs de la organización y el mayor número de aportes en 21 de sus 24 repositorios.`,
       'Construyo productos de punta a punta: un helpdesk SaaS multi-tenant, un gateway de WhatsApp, un CRM de admisiones escolar, facturación electrónica FEL y verticales sobre Odoo 18. También desarrollo la plataforma GCP/Terraform, los flujos CI/CD y las herramientas internas que permiten operarlos.',
@@ -55,12 +55,12 @@ export const portfolioData = {
   },
   career: {
     sectionLabel: '// 02 > career.log',
-    sectionTitle: 'TRAYECTORIA',
+    sectionTitle: 'Trayectoria',
     items: careerItemsFromJourney,
   },
   studies: {
     sectionLabel: '// 03 > education.db',
-    sectionTitle: 'ESTUDIOS',
+    sectionTitle: 'Estudios',
     items: [
       {
         date: '2023 → PRESENTE',
@@ -84,7 +84,7 @@ export const portfolioData = {
   },
   skills: {
     sectionLabel: '// 04 > skills.json',
-    sectionTitle: 'HABILIDADES CON EVIDENCIA',
+    sectionTitle: 'Habilidades con evidencia',
     items: [
       {
         label: 'PY',
@@ -144,8 +144,8 @@ export const portfolioData = {
   },
   projects: {
     sectionLabel: '// 05 > projects.git',
-    sectionTitle: 'TRABAJO SELECCIONADO',
-    cta: { href: 'https://github.com/daniel-baf', id: 'cta-github', label: '↗ Ver todos en GitHub' },
+    sectionTitle: 'Trabajo seleccionado',
+    cta: { href: 'https://github.com/daniel-baf', id: 'cta-github', label: 'Ver todos en GitHub ↗' },
     items: [
       {
         code: '01',
@@ -366,7 +366,7 @@ export const portfolioData = {
   },
   hobbies: {
     sectionLabel: '// 07 > community.md',
-    sectionTitle: 'COMUNIDAD Y RECURSOS',
+    sectionTitle: 'Comunidad y recursos',
     items: [
       {
         label: 'FERIA UNIVERSITARIA',
@@ -384,7 +384,7 @@ export const portfolioData = {
   },
   contact: {
     sectionLabel: '// 08 > contact.sh',
-    sectionTitle: 'CONTACTO',
+    sectionTitle: 'Contacto',
     intro: 'Backend · cloud · producto · open source',
     email: 'danibaufu@gmail.com',
     note: 'Disponible para construir productos, integraciones y plataforma cloud, colaborar en open source y facilitar talleres técnicos.',

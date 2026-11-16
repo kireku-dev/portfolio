@@ -16,9 +16,10 @@ const labels: Record<string, string> = {
   'hobbies-title': '07 — Comunidad',
   'contact-title': '08 — Contacto',
 };
+const [index, name] = (labels[titleId] ?? label).split(' — ');
 ---
 
 <div class="section-heading">
-  <p class="section-label">{labels[titleId] ?? label}</p>
+  <p class="eyebrow section-label"><span class="tick" aria-hidden="true"></span><b>{index}</b>{name && ` / ${name}`}</p>
   <h2 class="section-title" id={titleId}>{title}</h2>
 </div>

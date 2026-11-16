@@ -1,19 +1,33 @@
 ---
-import PresentationShell from '../components/presentation/PresentationShell.astro';
+import AboutSection from '../components/AboutSection.astro';
+import CareerSection from '../components/CareerSection.astro';
+import ContactSection from '../components/ContactSection.astro';
+import FooterSection from '../components/FooterSection.astro';
+import HobbiesSection from '../components/HobbiesSection.astro';
+import NavHeroSection from '../components/NavHeroSection.astro';
+import ProjectsSection from '../components/ProjectsSection.astro';
+import SkillsSection from '../components/SkillsSection.astro';
+import StudiesSection from '../components/StudiesSection.astro';
+import TalksSection from '../components/TalksSection.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { presentationMeta } from '../data/presentation';
+import { portfolioData } from '../data/portfolio';
 ---
 
 <BaseLayout
-  title={presentationMeta.title}
-  description={presentationMeta.description}
-  mode="presentation"
+  title="Daniel Bautista — Backend & Cloud Engineer"
+  description="Daniel Bautista: backend, infraestructura cloud, GCP y desarrollo de productos confiables. Guatemala."
 >
-  <PresentationShell />
+  <main id="cv-document" class="cv-document">
+    <NavHeroSection navLinks={portfolioData.navLinks} hero={portfolioData.hero} />
+    <AboutSection about={portfolioData.about} />
+    <CareerSection career={portfolioData.career} />
+    <StudiesSection studies={portfolioData.studies} />
+    <SkillsSection skills={portfolioData.skills} />
+    <ProjectsSection projects={portfolioData.projects} />
+    <TalksSection />
+    <HobbiesSection hobbies={portfolioData.hobbies} />
+    <ContactSection contact={portfolioData.contact} />
+  </main>
+
+  <FooterSection footer={portfolioData.footer} />
 </BaseLayout>
-
-<script>
-  import { initPresentation } from '../presentation/init';
-
-  initPresentation();
-</script>

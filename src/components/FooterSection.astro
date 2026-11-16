@@ -12,10 +12,12 @@ interface Props {
 }
 
 const { footer } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const [copyBefore = '', copyAfter = ''] = footer.copy.split('daniel-baf');
 ---
 
-<footer role="contentinfo">
+<footer role="contentinfo" class="site-footer">
+  <img class="footer-mark" src={`${base}/assets/brand/kireku-logo-principal.svg`} alt="kireku" width="171" height="32" loading="lazy" />
   <p class="footer-copy">{copyBefore}<span>daniel-baf</span>{copyAfter}</p>
   <div class="footer-links" aria-label="Enlaces de Daniel Bautista">
     {

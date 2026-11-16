@@ -1,7 +1,13 @@
-import { initCv } from './init-cv.js';
+import { initActiveNav } from './features/active-nav.js';
+import { initScrollReveal } from './features/scroll-reveal.js';
+import { initSkillPopup } from './features/skill-popup.js';
+import { initCareerDialogs } from './features/career-dialog.js';
+import { initProjectCarousels } from './features/project-carousel.js';
 
-const mode = document.body.dataset.mode;
+initSkillPopup();
+initActiveNav();
+initScrollReveal();
+initProjectCarousels();
+initCareerDialogs();
 
-if (mode === 'cv') {
-  initCv();
-}
+document.getElementById('cta-print-cv')?.addEventListener('click', () => window.print());
