@@ -8,6 +8,7 @@ import { initTerminalWriter } from './features/terminal-writer.js';
 import { initNavbarScroll } from './features/navbar-scroll.js';
 import { initCvIntro } from './features/cv-intro.js';
 import { initCareerDialogs } from './features/career-dialog.js';
+import { initProjectCarousels } from './features/project-carousel.js';
 
 export function initCv() {
   initCvIntro();
@@ -18,6 +19,7 @@ export function initCv() {
   initSkillPopup();
   initActiveNav();
   initScrollReveal();
+  initProjectCarousels();
   initCareerDialogs();
 
   const printBtn = document.getElementById('cta-print-cv');

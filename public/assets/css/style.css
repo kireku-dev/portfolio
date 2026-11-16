@@ -4,8 +4,6 @@
    Inspired by Stitch "Mainframe Console" Design System
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
-
 /* ══════════════════════════════════════════════════════════
    TERMINAL THEME SYSTEM - MULTI COLOR VARIATIONS
    ════════════════════════════════════════════════════════ */
@@ -61,9 +59,9 @@
   --panel-shadow: none;
   
   /* Typography */
-  --font-headline: 'Space Grotesk', sans-serif;
-  --font-body: 'Manrope', sans-serif;
-  --font-label: 'Inter', sans-serif;
+  --font-headline: 'Archivo', sans-serif;
+  --font-body: 'Instrument Sans', sans-serif;
+  --font-label: 'Instrument Sans', sans-serif;
   
   /* Transitions - No bounce/spring physics */
   --transition: 200ms ease-out;

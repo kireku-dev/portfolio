@@ -727,6 +727,15 @@ body[data-mode='presentation'] .typography-stage__cta.btn-outline {
   100% { transform: scale(46); opacity: 1; }
 }
 
+.presentation-loading__count {
+  letter-spacing: -0.04em;
+}
+
+.achievement-bubble__tag,
+.typography-stage__label {
+  letter-spacing: 0.1em;
+}
+
 @media (max-width: 800px) {
   .presentation-hud {
     grid-template-columns: 1fr auto;

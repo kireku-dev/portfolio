@@ -120,21 +120,63 @@ const base = import.meta.env.BASE_URL;
                         }
                         {
                           project.details.screenshots && project.details.screenshots.length > 0 && (
-                            <div class="project-dialog__gallery">
+                            <div
+                              class="project-carousel"
+                              data-project-carousel
+                              aria-roledescription="carrusel"
+                              aria-label={`Capturas de ${project.name}`}
+                            >
+                              <div class="project-carousel__viewport">
+                                {
+                                  project.details.screenshots.map((screenshot, index) => (
+                                    <figure
+                                      class:list={['project-dialog__shot', { 'is-active': index === 0 }]}
+                                      data-carousel-slide
+                                      aria-hidden={index !== 0}
+                                    >
+                                      <div class="project-dialog__image-wrap">
+                                        <img
+                                          src={`${base}${screenshot.image}`}
+                                          alt={screenshot.alt}
+                                          width="1200"
+                                          height="750"
+                                          loading="lazy"
+                                          decoding="async"
+                                          draggable="false"
+                                        />
+                                      </div>
+                                      <figcaption>
+                                        <span>{screenshot.caption}</span>
+                                        <span class="project-carousel__counter">
+                                          {String(index + 1).padStart(2, '0')} / {String(project.details.screenshots!.length).padStart(2, '0')}
+                                        </span>
+                                      </figcaption>
+                                    </figure>
+                                  ))
+                                }
+                              </div>
                               {
-                                project.details.screenshots.map((screenshot) => (
-                                  <figure class="project-dialog__shot">
-                                    <img
-                                      src={`${base}${screenshot.image}`}
-                                      alt={screenshot.alt}
-                                      width="1200"
-                                      height="750"
-                                      loading="lazy"
-                                      decoding="async"
-                                    />
-                                    <figcaption>{screenshot.caption}</figcaption>
-                                  </figure>
-                                ))
+                                project.details.screenshots.length > 1 && (
+                                  <div class="project-carousel__controls">
+                                    <button type="button" data-carousel-prev aria-label={`Captura anterior de ${project.name}`}>←</button>
+                                    <div class="project-carousel__dots" aria-label="Elegir captura">
+                                      {
+                                        project.details.screenshots.map((_, index) => (
+                                          <button
+                                            type="button"
+                                            data-carousel-dot={index}
+                                            aria-label={`Ver captura ${index + 1}`}
+                                            aria-pressed={index === 0}
+                                          >
+                                            {String(index + 1).padStart(2, '0')}
+                                          </button>
+                                        ))
+                                      }
+                                    </div>
+                                    <button type="button" data-carousel-next aria-label={`Captura siguiente de ${project.name}`}>→</button>
+                                    <button class="project-carousel__toggle" type="button" data-carousel-toggle aria-pressed="false">Pausar</button>
+                                  </div>
+                                )
                               }
                             </div>
                           )

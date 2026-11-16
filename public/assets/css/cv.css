@@ -1115,10 +1115,10 @@ body.career-dialog-open {
 body[data-mode='cv'] .career-dialog {
   position: fixed;
   inset: 0;
-  width: min(1080px, calc(100vw - 2rem));
+  width: 90vw;
   max-width: none;
-  height: min(860px, calc(100dvh - 2rem));
-  max-height: calc(100dvh - 2rem);
+  height: 90dvh;
+  max-height: 90dvh;
   margin: auto;
   padding: 0;
   overflow: hidden;
@@ -1290,36 +1290,111 @@ body[data-mode='cv'] .career-dialog__link {
   text-underline-offset: 0.3rem;
 }
 
-body[data-mode='cv'] .project-dialog__gallery {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+body[data-mode='cv'] .project-carousel {
   margin-top: 2rem;
-  border: 0;
-  background: transparent;
+}
+
+body[data-mode='cv'] .project-carousel__viewport {
+  display: grid;
 }
 
 body[data-mode='cv'] .project-dialog__shot {
+  grid-area: 1 / 1;
   margin: 0;
   overflow: hidden;
   border: 1px solid var(--cv-line);
   border-radius: 1rem;
   background: var(--cv-surface-raised);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.99);
+  transition: opacity 280ms ease, transform 280ms ease, visibility 280ms ease;
+  pointer-events: none;
+}
+
+body[data-mode='cv'] .project-dialog__shot.is-active {
+  z-index: 1;
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+body[data-mode='cv'] .project-dialog__image-wrap {
+  display: grid;
+  height: min(58vh, 680px);
+  min-height: 280px;
+  place-items: center;
+  background: #09090b;
 }
 
 body[data-mode='cv'] .project-dialog__shot img {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
+  height: 100%;
+  object-fit: contain;
 }
 
 body[data-mode='cv'] .project-dialog__shot figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
   margin: 0;
-  padding: 0.8rem 1rem;
+  padding: 0.9rem 1.1rem;
   color: var(--cv-muted);
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   line-height: 1.5;
+}
+
+body[data-mode='cv'] .project-carousel__counter {
+  flex: 0 0 auto;
+  color: var(--cv-ink);
+  font-family: var(--font-label);
+  font-variant-numeric: tabular-nums;
+}
+
+body[data-mode='cv'] .project-carousel__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.9rem;
+}
+
+body[data-mode='cv'] .project-carousel__controls button {
+  display: grid;
+  min-width: 2.65rem;
+  height: 2.65rem;
+  place-items: center;
+  padding: 0 0.75rem;
+  border: 1px solid var(--cv-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cv-muted);
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+body[data-mode='cv'] .project-carousel__controls button:hover,
+body[data-mode='cv'] .project-carousel__controls button:focus-visible,
+body[data-mode='cv'] .project-carousel__controls button[aria-pressed='true'] {
+  border-color: var(--cv-accent);
+  color: var(--cv-ink);
+  outline: none;
+}
+
+body[data-mode='cv'] .project-carousel__dots {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+body[data-mode='cv'] .project-carousel__dots button {
+  min-width: 2.35rem;
+  height: 2.35rem;
+  padding: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 @keyframes cv-dialog-enter {
@@ -1402,6 +1477,65 @@ body[data-mode='cv'] .footer-copy {
 
 body[data-mode='cv'] .footer-links {
   margin-top: 0;
+}
+
+body[data-mode='cv'] .metric-value {
+  font-size: 1.15rem;
+  letter-spacing: 0;
+}
+
+body[data-mode='cv'] .hero-summary,
+body[data-mode='cv'] .about-text p,
+body[data-mode='cv'] .timeline-desc,
+body[data-mode='cv'] .contact-note {
+  font-size: 1rem;
+}
+
+body[data-mode='cv'] .timeline-role {
+  font-size: 1.45rem;
+}
+
+body[data-mode='cv'] .timeline-company {
+  font-size: 0.88rem;
+}
+
+body[data-mode='cv'] .timeline-date,
+body[data-mode='cv'] .section-label,
+body[data-mode='cv'] .hero-tag {
+  font-size: 0.7rem;
+}
+
+body[data-mode='cv'] .timeline-more,
+body[data-mode='cv'] .project-link,
+body[data-mode='cv'] .project-more,
+body[data-mode='cv'] .btn {
+  font-size: 0.72rem;
+}
+
+body[data-mode='cv'] .project-code,
+body[data-mode='cv'] .project-lang {
+  font-size: 0.65rem;
+}
+
+body[data-mode='cv'] .project-name {
+  font-size: clamp(1.45rem, 2vw, 1.85rem);
+}
+
+body[data-mode='cv'] .project-desc {
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
+body[data-mode='cv'] .skill-name {
+  font-size: 1.2rem;
+}
+
+body[data-mode='cv'] .skill-meta {
+  font-size: 0.85rem;
+}
+
+body[data-mode='cv'] .skill-evidence {
+  font-size: 0.88rem;
 }
 
 @media (max-width: 1050px) {
@@ -1587,16 +1721,34 @@ body[data-mode='cv'] .footer-links {
   }
 
   body[data-mode='cv'] .career-dialog {
-    width: calc(100vw - 1rem);
-    height: calc(100dvh - 1rem);
-    max-height: calc(100dvh - 1rem);
     border-radius: 1rem;
   }
 
   body[data-mode='cv'] .career-dialog__sections,
-  body[data-mode='cv'] .career-dialog__outcomes ul,
-  body[data-mode='cv'] .project-dialog__gallery {
+  body[data-mode='cv'] .career-dialog__outcomes ul {
     grid-template-columns: 1fr;
+  }
+
+  body[data-mode='cv'] .project-dialog__image-wrap {
+    height: auto;
+    min-height: 0;
+  }
+
+  body[data-mode='cv'] .project-dialog__shot img {
+    height: auto;
+  }
+
+  body[data-mode='cv'] .project-dialog__shot figcaption {
+    gap: 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  body[data-mode='cv'] .project-carousel__controls {
+    flex-wrap: wrap;
+  }
+
+  body[data-mode='cv'] .project-carousel__toggle {
+    margin-left: auto;
   }
 }
 
