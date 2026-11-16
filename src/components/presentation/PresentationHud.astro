@@ -8,7 +8,7 @@ interface Props {
 const { variant } = Astro.props;
 const isCv = variant === 'cv';
 const totalBeats = presentationBeats.length;
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <header class="presentation-hud" aria-label="Navegación de la presentación">

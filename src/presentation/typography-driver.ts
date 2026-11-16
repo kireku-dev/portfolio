@@ -77,7 +77,7 @@ export function initTypographyDriver(beats: PresentationBeat[]): TypographyContr
           ctaEl.textContent = beat.cta.label;
           ctaEl.href = beat.cta.href.startsWith('http')
             ? beat.cta.href
-            : import.meta.env.BASE_URL + '/' + beat.cta.href.replace(/^\//, '');
+            : import.meta.env.BASE_URL.replace(/\/$/, '') + '/' + beat.cta.href.replace(/^\//, '');
         }
       }
 

@@ -36,7 +36,7 @@ export function initPresentation() {
   initWorldConsume();
 
   if (prefersReducedMotion) {
-    window.location.replace(import.meta.env.BASE_URL + '/cv');
+    window.location.replace(import.meta.env.BASE_URL.replace(/\/$/, '') + '/cv');
     return;
   }
 
