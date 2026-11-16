@@ -325,6 +325,21 @@ ul {
   background: var(--accent);
 }
 
+.hero-alias {
+  margin-top: var(--s3);
+  font: 400 13px/1.6 var(--mono);
+  color: var(--fg-dim);
+}
+
+.hero-alias b {
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.hero-alias span {
+  color: var(--fg-dim);
+}
+
 .hero-title {
   margin-top: var(--s3);
   font: 500 clamp(17px, 1.6vw, 20px)/1.4 var(--disp);

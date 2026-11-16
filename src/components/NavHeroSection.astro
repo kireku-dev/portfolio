@@ -4,6 +4,10 @@ interface Props {
   hero: {
     tag: string;
     name: string;
+    alias: string;
+    role: string;
+    roleDetail: string;
+    founder: string;
     summary: string;
     metrics: { value: string; label: string }[];
   };
@@ -38,7 +42,8 @@ const primaryLinks = navLinks.filter((link) => link.href in navLabels);
   <div class="hero-copy">
     <p class="eyebrow"><span class="tick" aria-hidden="true"></span>Curriculum vitae <b>/</b> Guatemala · 2026</p>
     <h1 class="hero-name">{hero.name}<span class="hero-name__dot" aria-hidden="true"></span></h1>
-    <p class="hero-title">Backend &amp; Cloud Engineer <em>— plataforma, integraciones y producto</em></p>
+    <p class="hero-alias">alias <b>{hero.alias}</b> <span>— {hero.founder}</span></p>
+    <p class="hero-title">{hero.role} <em>— {hero.roleDetail}</em></p>
     <p class="hero-summary">{hero.summary}</p>
 
     <div class="hero-cta">

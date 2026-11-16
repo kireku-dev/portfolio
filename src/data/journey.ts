@@ -41,16 +41,38 @@ export interface JourneyDetails {
   link?: JourneyLink;
 }
 
-// Julio de 2025 es la primera evidencia profesional verificable del recorrido.
-export const CAREER_START_YEAR = 2025;
-
-export function getProfessionalExperienceYears(currentYear = new Date().getFullYear()) {
-  return Math.max(0, currentYear - CAREER_START_YEAR);
+// Start months come from Daniel's own account (2026-11-16): two years of
+// professional experience, one year and seven months of them at Vantum ST.
+// Durations are computed from these dates, so they stay correct over time.
+export interface MonthStamp {
+  year: number;
+  /** 1-12 */
+  month: number;
 }
 
-export function formatProfessionalExperience(currentYear = new Date().getFullYear()) {
-  const years = getProfessionalExperienceYears(currentYear);
-  return `${years} ${years === 1 ? 'año' : 'años'}`;
+export const CAREER_START: MonthStamp = { year: 2024, month: 11 };
+export const VANTUM_START: MonthStamp = { year: 2025, month: 4 };
+
+export function monthsSince(start: MonthStamp, now = new Date()) {
+  const months = (now.getFullYear() - start.year) * 12 + (now.getMonth() + 1 - start.month);
+  return Math.max(0, months);
+}
+
+export function formatDuration(totalMonths: number) {
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+  const yearText = years > 0 ? `${years} ${years === 1 ? 'año' : 'años'}` : '';
+  const monthText = months > 0 ? `${months} ${months === 1 ? 'mes' : 'meses'}` : '';
+  if (yearText && monthText) return `${yearText} y ${monthText}`;
+  return yearText || monthText || 'menos de un mes';
+}
+
+export function formatProfessionalExperience(now = new Date()) {
+  return formatDuration(monthsSince(CAREER_START, now));
+}
+
+export function formatVantumTenure(now = new Date()) {
+  return formatDuration(monthsSince(VANTUM_START, now));
 }
 
 export interface JourneyChapter {

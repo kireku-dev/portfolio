@@ -1,4 +1,4 @@
-import { formatProfessionalExperience, journey } from './journey';
+import { formatProfessionalExperience, formatVantumTenure, journey } from './journey';
 import type { JourneyDetails } from './journey';
 
 const careerItemsFromJourney = journey
@@ -17,6 +17,7 @@ const careerItemsFromJourney = journey
   .reverse();
 
 const professionalExperience = formatProfessionalExperience();
+const vantumTenure = formatVantumTenure();
 
 export const portfolioData = {
   navLinks: [
@@ -30,10 +31,14 @@ export const portfolioData = {
     { href: '#contact', id: 'nav-contact', label: 'contact' },
   ],
   hero: {
-    tag: 'Backend & Cloud Engineer · plataforma, integraciones y producto',
+    tag: 'Tech Lead en Vantum ST · backend, cloud y producto',
     name: 'Daniel Bautista',
+    alias: 'kireku',
+    role: 'Tech Lead en Vantum ST',
+    roleDetail: 'backend, cloud y producto',
+    founder: 'Fundador de kireku: desarrollo de software y hardware, y todo lo que hay entre ambos.',
     summary:
-      `Principal contribuidor de Vantum ST: construyo productos completos, integraciones y plataforma GCP/Terraform. Tengo ${professionalExperience} de experiencia profesional, contribuyo a open source y comparto lo que aprendo mediante talleres y documentación.`,
+      `Llevo ${vantumTenure} en Vantum ST: entré como backend engineer, pasé a fullstack y hoy soy tech lead del equipo. Tengo ${professionalExperience} de experiencia profesional construyendo productos completos, integraciones y plataforma GCP/Terraform, y contribuyo a open source.`,
     metrics: [
       { value: '600+', label: 'PRs mergeados en producción durante 2026' },
       { value: '~60 %', label: 'de los PRs de la organización Vantum' },
@@ -47,7 +52,8 @@ export const portfolioData = {
     sectionLabel: '// 01 > about.exe',
     sectionTitle: 'Sobre mí',
     paragraphs: [
-      `Soy Daniel Eduardo Bautista Fuentes, backend y cloud engineer de Guatemala. Tengo ${professionalExperience} de experiencia profesional y soy el principal contribuidor de Vantum ST, con cerca del 60 % de los PRs de la organización y el mayor número de aportes en 21 de sus 24 repositorios.`,
+      `Soy Daniel Eduardo Bautista Fuentes, también conocido como kireku: tech lead y backend/cloud engineer de Guatemala, y fundador de kireku, un estudio de desarrollo de software y hardware. Tengo ${professionalExperience} de experiencia profesional, ${vantumTenure} de ellos en Vantum ST, donde pasé de backend engineer a fullstack y luego a tech lead.`,
+      'En Vantum ST soy el principal contribuidor: cerca del 60 % de los PRs de la organización y el mayor número de aportes en 21 de sus 24 repositorios.',
       'Construyo productos de punta a punta: un helpdesk SaaS multi-tenant, un gateway de WhatsApp, un CRM de admisiones escolar, facturación electrónica FEL y verticales sobre Odoo 18. También desarrollo la plataforma GCP/Terraform, los flujos CI/CD y las herramientas internas que permiten operarlos.',
       'Fuera del trabajo diario contribuyo a Engram, LenovoLegionLinux y MCP-Packet-Tracer. Me interesa convertir el conocimiento en algo compartible: estándares de ingeniería, pruebas, documentación y talleres de Git, GitHub y seguridad.',
     ],
@@ -232,6 +238,132 @@ export const portfolioData = {
         id: 'proj-fel',
       },
       {
+        code: '05',
+        lang: 'Privado · Bash · GCP Secret Manager',
+        name: 'VANTUM CLI',
+        desc: 'La CLI interna del equipo: sincroniza los .env de cada repo con GCP Secret Manager y diagnostica el entorno de desarrollo.',
+        details: {
+          intro: 'Una herramienta que creé y mantengo sola para que nadie vuelva a pasar secretos por chat: cada repo tiene su proyecto en Secret Manager y la CLI lo trae, lo sube o lo descubre.',
+          sections: [
+            {
+              title: 'Comandos',
+              copy: 'vantum env pull / push / discover para los .env, doctor para revisar dependencias y credenciales, init para preparar un repo y update con canal stable o beta. Incluye una TUI que avisa cuando hay versión nueva.',
+            },
+            {
+              title: 'Calidad y releases',
+              copy: 'Pruebas bats que corren dentro de Docker, shellcheck en CI y versionado semántico calculado desde Conventional Commits. Funciona en Linux y macOS.',
+            },
+          ],
+          outcomes: ['Creador y único autor: 22 de 22 commits.', '139 pruebas bats.', 'Canales stable y beta.'],
+        },
+        id: 'proj-vantum-cli',
+      },
+      {
+        code: '06',
+        lang: 'Privado · Markdown · Claude Code',
+        name: 'ESTÁNDAR DE INGENIERÍA',
+        desc: 'El estándar de diseño e ingeniería de Vantum, convertido en skills de Claude Code que usa todo el equipo.',
+        details: {
+          intro: 'Dos repos que escribí yo: design-guidelines define cómo se diseña y construye en la empresa, y vantum-tools lo lleva al día a día como un marketplace de plugins de Claude Code.',
+          sections: [
+            {
+              title: 'design-guidelines',
+              copy: 'DESIGN.md, ENGINEERING.md, API.md y DATABASE.md, más plantillas de issues y PRs con etiquetado automático. El sistema de UI se extrajo del CRM en producción y se adoptó como estándar de la empresa.',
+            },
+            {
+              title: 'vantum-tools',
+              copy: 'Skills commit, pr, review, address-review, ready, tdd y ui que aplican la guía en cada sesión. Las versiones estables salen de main y las beta de develop.',
+            },
+          ],
+          outcomes: ['Creador y único autor de ambos repos.', '7 skills en uso por el equipo.', 'Guía extraída de un producto en producción.'],
+        },
+        id: 'proj-engineering-standard',
+      },
+      {
+        code: '07',
+        lang: 'Privado · Fastify · React · Terraform',
+        name: 'CONSOLA MULTI-TENANT',
+        desc: 'Un panel para operar los tenants de WhatsApp y de email: conexión en vivo, credenciales, proveedores y auditoría.',
+        details: {
+          intro: 'La consola de operación de la plataforma de mensajería. Nació dentro de WhatsApp Stack y la separé, con su historial, como un servicio propio.',
+          sections: [
+            {
+              title: 'Operación',
+              copy: 'Estado de conexión en vivo, emparejamiento por QR, rotación de tokens y secretos HMAC, credenciales de Meta, cambio de proveedor y alta de remitentes del servicio de email. Cada acción queda en un audit log con su actor.',
+            },
+            {
+              title: 'Seguridad y despliegue',
+              copy: 'Google OAuth del lado del servidor con Identity Platform, cookie de sesión HMAC y allowlist de correos. Pruebas que verifican que ningún secreto llega al navegador. Terraform, Cloud Run con Direct VPC egress y deploy por Workload Identity Federation.',
+            },
+          ],
+          outcomes: ['54 de 55 commits.', 'Secretos que nunca salen del servidor.', 'Un solo panel para WhatsApp y email.'],
+        },
+        id: 'proj-tenants-admin',
+      },
+      {
+        code: '08',
+        lang: 'Privado · FastAPI · React · Vertex AI',
+        name: 'ERP Y NÓMINA GUATEMALTECA',
+        desc: 'ERP de ventas, gastos, cuentas, activos fijos y nómina para un colegio privado. Lo creé desde el primer commit.',
+        details: {
+          intro: 'Mi primer sistema grande en Vantum: un ERP con FastAPI async, React 19, Cloud SQL y Vertex AI.',
+          sections: [
+            {
+              title: 'Nómina',
+              copy: 'Períodos con auditoría, embargos judiciales, cálculo de ISR, prestaciones, Bono 14, aguinaldo y liquidaciones según la ley guatemalteca.',
+            },
+            {
+              title: 'Plataforma',
+              copy: 'ORM y migraciones, gestión de personal, carga de DTEs con OCR y corrección de sus falsos positivos. Autenticación con Firebase.',
+            },
+          ],
+          outcomes: ['Creador del repo.', '295 de 308 commits.', 'Nómina completa con prestaciones de ley.'],
+        },
+        id: 'proj-erp-nomina',
+      },
+      {
+        code: '09',
+        lang: 'Privado · TypeScript · BullMQ · Gmail API',
+        name: 'EMAIL TRANSACCIONAL',
+        desc: 'Microservicio multi-tenant que encola correos y los envía por la Gmail API. Le agregué la capa de confiabilidad y la de tenants.',
+        details: {
+          intro: 'Un servicio de correo genérico que usan los productos y los ERPs de Vantum. Soy coautor: mi parte fue lo que lo hace confiable y multi-tenant.',
+          sections: [
+            {
+              title: 'Confiabilidad',
+              copy: 'Callbacks de entrega firmados con su suite de pruebas, detección de rebotes (DSN) notificada como bounced, apagado ordenado y un proceso que ya no se cae por un error en una conexión ociosa del pool.',
+            },
+            {
+              title: 'Multi-tenant',
+              copy: 'Store de secretos cifrado, remitentes en Postgres con API de administración y caché con TTL, y API keys con alcance de tenant o de admin, denegadas por defecto.',
+            },
+          ],
+          outcomes: ['Coautor.', 'Rebotes y entregas reportados al cliente.', 'Acceso denegado por defecto.'],
+        },
+        id: 'proj-email-scheduler',
+      },
+      {
+        code: '10',
+        lang: 'Privado · Odoo 18 · Terraform · GCE',
+        name: 'VERTICALES ODOO 18',
+        desc: 'Implementaciones de Odoo 18 para una agencia de viajes, una empresa de materiales de construcción y un colegio, con infraestructura reproducible.',
+        details: {
+          intro: 'Varios ERPs sobre Odoo 18 que llevé a producción, más los módulos compartidos que los unen con el resto de la plataforma.',
+          sections: [
+            {
+              title: 'Infraestructura',
+              copy: 'Terraform con state remoto y entornos separados, Cloud SQL, VMs con Ops Agent y proxy HTTPS con Caddy. Un guardrail rechaza cualquier plan que destruya o reemplace recursos. CI con las pruebas de Odoo en cada PR y deploy por Workload Identity Federation.',
+            },
+            {
+              title: 'Módulos',
+              copy: 'odoo-vantum-mail envía el correo de cualquier Odoo por el servicio de email, sin enviar nada si la transacción hace rollback. También factura FEL impresa, rediseño del workspace con tema claro y oscuro, y correcciones de concurrencia como el doble envío por doble click.',
+            },
+          ],
+          outcomes: ['102 de 103 commits en el ERP del colegio.', 'Releases versionados y deploy automático.', 'Módulo de correo compartido entre verticales.'],
+        },
+        id: 'proj-odoo-verticals',
+      },
+      {
         code: 'SIGA',
         lang: 'Django · React · GCP',
         name: 'SIGA-INEBI',
@@ -395,7 +527,7 @@ export const portfolioData = {
     ],
   },
   footer: {
-    copy: `daniel-baf · Backend & Cloud · Guatemala · ${new Date().getFullYear()}`,
+    copy: `daniel-baf · kireku · Tech Lead · Guatemala · ${new Date().getFullYear()}`,
     links: [
       { href: 'https://github.com/daniel-baf', label: 'GitHub' },
       { href: 'https://linkedin.com/in/daniel-bautista-46bb69267', label: 'LinkedIn' },
