@@ -25,6 +25,7 @@ export const portfolioData = {
     { href: '#studies', id: 'nav-studies', label: 'studies' },
     { href: '#skills', id: 'nav-skills', label: 'skills' },
     { href: '#projects', id: 'nav-projects', label: 'projects' },
+    { href: '#talks', id: 'nav-talks', label: 'talks' },
     { href: '#hobbies', id: 'nav-hobbies', label: 'comunidad' },
     { href: '#contact', id: 'nav-contact', label: 'contact' },
   ],
@@ -364,21 +365,9 @@ export const portfolioData = {
     ],
   },
   hobbies: {
-    sectionLabel: '// 06 > community.md',
-    sectionTitle: 'DOCENCIA Y COMUNIDAD',
+    sectionLabel: '// 07 > community.md',
+    sectionTitle: 'COMUNIDAD Y RECURSOS',
     items: [
-      {
-        label: 'TALLER · UDEO',
-        name: 'Git Quest: del primer commit a chained PRs',
-        description: 'Taller práctico de cuatro horas para principiantes, con una app .NET 8 construida por ramas acumulativas.',
-        href: 'https://github.com/daniel-baf/taller-github-udeo',
-      },
-      {
-        label: 'CURSO · URL',
-        name: 'Práctica Git & GitHub: de cero a avanzado',
-        description: 'Unas 20 lecciones por ramas: rebase, conflictos, squash, reviews, cherry-pick y worktree. 40 forks de estudiantes.',
-        href: 'https://github.com/daniel-baf/practica-git-github-url-2026',
-      },
       {
         label: 'FERIA UNIVERSITARIA',
         name: 'Quishing Lab y Notas Seguras',
@@ -394,7 +383,7 @@ export const portfolioData = {
     ],
   },
   contact: {
-    sectionLabel: '// 07 > contact.sh',
+    sectionLabel: '// 08 > contact.sh',
     sectionTitle: 'CONTACTO',
     intro: 'Backend · cloud · producto · open source',
     email: 'danibaufu@gmail.com',

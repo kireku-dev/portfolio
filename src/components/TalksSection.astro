@@ -1,0 +1,32 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { talks, talksIndex } from '../data/talks';
+---
+
+<section id="talks" aria-labelledby="talks-title" data-scene="desk">
+  <SectionHeading label="// 06 > talks.log" title="Charlas y talleres" titleId="talks-title" />
+
+  <div class="talks-grid">
+    {
+      talks.map((talk) => (
+        <article class="talk-card" id={talk.id}>
+          <p class="talk-meta">
+            <span class="talk-kind">{talk.kind}</span>
+            <span>{talk.date} · {talk.place}</span>
+          </p>
+          <h3 class="talk-title">{talk.title}</h3>
+          <p class="talk-desc">{talk.desc}</p>
+          <a href={talk.link.href} class="talk-link" target="_blank" rel="noopener">
+            {talk.link.label}<span aria-hidden="true"> ↗</span>
+          </a>
+        </article>
+      ))
+    }
+  </div>
+
+  <div class="projects-footer">
+    <a href={talksIndex.href} class="btn btn-outline" target="_blank" rel="noopener" id="talks-index">
+      {talksIndex.label}
+    </a>
+  </div>
+</section>

@@ -9,6 +9,7 @@ import NavHeroSection from '../components/NavHeroSection.astro';
 import ProjectsSection from '../components/ProjectsSection.astro';
 import SkillsSection from '../components/SkillsSection.astro';
 import StudiesSection from '../components/StudiesSection.astro';
+import TalksSection from '../components/TalksSection.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { portfolioData } from '../data/portfolio';
 ---
@@ -27,6 +28,7 @@ import { portfolioData } from '../data/portfolio';
     <StudiesSection studies={portfolioData.studies} />
     <SkillsSection skills={portfolioData.skills} />
     <ProjectsSection projects={portfolioData.projects} />
+    <TalksSection />
     <HobbiesSection hobbies={portfolioData.hobbies} />
     <ContactSection contact={portfolioData.contact} />
   </main>
