@@ -31,14 +31,14 @@ export const portfolioData = {
     { href: '#contact', id: 'nav-contact', label: 'contact' },
   ],
   hero: {
-    tag: 'Tech Lead en Vantum ST · backend, cloud y producto',
+    tag: 'Tech Lead y encargado de infraestructura en Vantum ST · cloud, backend y producto',
     name: 'Daniel Bautista',
     alias: 'kireku',
-    role: 'Tech Lead en Vantum ST',
-    roleDetail: 'backend, cloud y producto',
+    role: 'Tech Lead y encargado de infraestructura en Vantum ST',
+    roleDetail: 'cloud engineer · backend y producto',
     founder: 'Fundador de kireku: desarrollo de software y hardware, y todo lo que hay entre ambos.',
     summary:
-      `Llevo ${vantumTenure} en Vantum ST: entré como backend engineer, pasé a fullstack y hoy soy tech lead del equipo. Tengo ${professionalExperience} de experiencia profesional construyendo productos completos, integraciones y plataforma GCP/Terraform, y contribuyo a open source.`,
+      `Llevo ${vantumTenure} en Vantum ST: entré como backend engineer, pasé a fullstack y hoy soy tech lead y encargado de infraestructura, los dos puestos a la vez. Soy cloud engineer con ${professionalExperience} de experiencia profesional construyendo productos completos, integraciones y plataforma GCP/Terraform. Cerré el pensum de Ingeniería en Informática y Sistemas en 2026.`,
     metrics: [
       { value: '600+', label: 'PRs mergeados en producción durante 2026' },
       { value: '~60 %', label: 'de los PRs de la organización Vantum' },
@@ -48,11 +48,67 @@ export const portfolioData = {
       { value: '7', label: 'PRs open source externos mergeados' },
     ],
   },
+  story: {
+    sectionLabel: '// 00 > story.sh',
+    sectionTitle: 'Mi historia, pieza por pieza',
+    chapters: [
+      {
+        id: 'story-rack',
+        scene: 'rack',
+        kicker: 'El rack',
+        title: 'Me gusta ver los sistemas por dentro',
+        copy: [
+          'Soy cloud engineer y tech lead. En 2026 cerré el pensum de Ingeniería en Informática y Sistemas en la Universidad Rafael Landívar, y con kireku hago software y hardware.',
+          'Siempre he querido saber qué pasa dentro de las cajas. Por eso esta historia empieza con un rack cerrado, y a medida que bajas se va abriendo.',
+        ],
+      },
+      {
+        id: 'story-architecture',
+        scene: 'internals',
+        kicker: 'Por dentro',
+        title: 'Arquitectura y patrones de diseño',
+        copy: [
+          'Lo que más disfruto es decidir cómo se separan las piezas. En la facturación FEL el negocio habla con una interfaz neutral y cada certificador es un adaptador: así cambiamos de proveedor en producción sin tocar el dominio.',
+          'En WhatsApp Stack dos proveedores viven detrás de la misma interfaz, y las colas por tenant aguantan casi un día de caída del consumidor. Un buen diseño se nota cuando algo falla y el resto sigue funcionando.',
+        ],
+      },
+      {
+        id: 'story-infra',
+        scene: 'network',
+        kicker: 'La red',
+        title: 'Cloud engineer y encargado de infraestructura',
+        copy: [
+          'Además de liderar el equipo, soy el encargado de infraestructura de Vantum ST. Diseño la plataforma en GCP con Terraform: Cloud Run, Cloud SQL, VMs, entornos separados y deploys con Workload Identity Federation.',
+          'Hay un guardrail que rechaza cualquier plan que destruya recursos, y los secretos viven en Secret Manager; el equipo los sincroniza con la CLI que escribí.',
+        ],
+      },
+      {
+        id: 'story-lead',
+        scene: 'desk',
+        kicker: 'El escritorio',
+        title: 'Tech lead del equipo',
+        copy: [
+          `Llevo ${vantumTenure} en Vantum ST. Entré como backend engineer, pasé a fullstack y hoy lidero el equipo técnico.`,
+          'Reviso el trabajo de los demás (más de 140 PRs de otras personas), escribí el estándar de diseño e ingeniería de la empresa y lo convertí en skills de Claude Code para que cada sesión lo aplique.',
+        ],
+      },
+      {
+        id: 'story-both',
+        scene: 'together',
+        kicker: 'Todo conectado',
+        title: 'Por qué tener los dos puestos a la vez',
+        copy: [
+          'Cuando la misma persona decide la arquitectura y la infraestructura, el diseño ya sabe cómo se va a desplegar, cuánto va a costar y cómo va a fallar. No hay traspaso entre equipos: una decisión se prueba en staging el mismo día.',
+          'Los estándares de código y de plataforma salen juntos (la guía, la CLI y los módulos de Terraform), y cuando algo se cae en producción, quien lo diagnostica conoce tanto el código como la red.',
+        ],
+      },
+    ],
+  },
   about: {
     sectionLabel: '// 01 > about.exe',
     sectionTitle: 'Sobre mí',
     paragraphs: [
-      `Soy Daniel Eduardo Bautista Fuentes, también conocido como kireku: tech lead y backend/cloud engineer de Guatemala, y fundador de kireku, un estudio de desarrollo de software y hardware. Tengo ${professionalExperience} de experiencia profesional, ${vantumTenure} de ellos en Vantum ST, donde pasé de backend engineer a fullstack y luego a tech lead.`,
+      `Soy Daniel Eduardo Bautista Fuentes, también conocido como kireku: cloud engineer y tech lead de Guatemala, y fundador de kireku, un estudio de desarrollo de software y hardware. Tengo ${professionalExperience} de experiencia profesional, ${vantumTenure} de ellos en Vantum ST, donde pasé de backend engineer a fullstack y hoy soy tech lead y encargado de infraestructura al mismo tiempo. En 2026 cerré el pensum de Ingeniería en Informática y Sistemas en la Universidad Rafael Landívar.`,
       'En Vantum ST soy el principal contribuidor: cerca del 60 % de los PRs de la organización y el mayor número de aportes en 21 de sus 24 repositorios.',
       'Construyo productos de punta a punta: un helpdesk SaaS multi-tenant, un gateway de WhatsApp, un CRM de admisiones escolar, facturación electrónica FEL y verticales sobre Odoo 18. También desarrollo la plataforma GCP/Terraform, los flujos CI/CD y las herramientas internas que permiten operarlos.',
       'Fuera del trabajo diario contribuyo a Engram, LenovoLegionLinux y MCP-Packet-Tracer. Me interesa convertir el conocimiento en algo compartible: estándares de ingeniería, pruebas, documentación y talleres de Git, GitHub y seguridad.',
@@ -69,8 +125,8 @@ export const portfolioData = {
     sectionTitle: 'Estudios',
     items: [
       {
-        date: '2023 → PRESENTE',
-        role: 'INGENIERÍA EN INFORMÁTICA Y SISTEMAS · 5.º AÑO',
+        date: '2023 → 2026',
+        role: 'INGENIERÍA EN INFORMÁTICA Y SISTEMAS · CIERRE DE PENSUM 2026',
         company: 'Universidad Rafael Landívar (URL) · Guatemala',
         desc: 'Proyectos integradores con equipos y usuarios reales: SIGA-INEBI en producción, ERP del curso de Programación Web y ExamLock. Arquitectura, bases de datos, cloud, seguridad y entrega de software.',
       },
