@@ -4,7 +4,7 @@
 
 import { TURN } from "../anatomy/turn.mjs";
 import { loadAt, stateAt, blinkHz, readoutOf, detailOf } from "./model.mjs";
-import { follow, storyAt, explodeAt, cameraAt, STORY_ANGLE, SCENES, clamp, smooth } from "./scenes.mjs";
+import { follow, storyAt, explodeAt, cameraAt, travelAt, sceneOf, STORY_ANGLE, SCENES, SIDES, clamp, smooth } from "./scenes.mjs";
 const hash = (a, b) => {
   let h = (a * 374761393 + b * 668265263) | 0;
   h = Math.imul(h ^ (h >>> 13), 1274126177);
@@ -69,9 +69,14 @@ export function mountDatacenter(root) {
   let drag = null;
   let fanTurn = 0;
   let readoutAt = 0;
-  // Scroll story: s runs 0…4 (one unit per chapter); the page's scroll sets the target.
+  // Scroll story: the page sets p (0 hero, 1…5 chapters); the scenes run on s = p − 1 (0…4).
+  let place = 0;
+  let placeTarget = 0;
   let story = 0;
   let storyTarget = 0;
+  // Beside the text on wide screens the figure crosses the page; pinned on top it only drifts.
+  const wide = matchMedia("(min-width: 1081px)");
+  let travelKey = "";
   const scrolled = () => story > 0.02 || storyTarget > 0.02;
   const steps = (data.steps ?? []).map((key) => {
     const scene = key[0];
@@ -133,16 +138,31 @@ export function mountDatacenter(root) {
       for (const svg of layers) svg.setAttribute("viewBox", frame);
     }
   };
+  // The figure's place on the page: one transform on the figure, no layout reads.
+  const paintTravel = (go, calm) => {
+    let transform;
+    if (wide.matches) {
+      const scale = calm ? 1 : go.scale;
+      transform = `translate3d(${(go.side * 100).toFixed(2)}%, ${(calm ? 0 : -go.lift * 10).toFixed(1)}px, 0) scale(${scale.toFixed(4)})`;
+    } else transform = `translate3d(${((go.side - 0.5) * (calm ? 0 : 12)).toFixed(1)}px, 0, 0)`;
+    if (transform !== travelKey) {
+      travelKey = transform;
+      root.style.transform = transform;
+    }
+  };
   // The live rack is re-projected only when its group values change; the world layer and the
   // camera are cheap attribute writes and follow the story every frame.
   let groupsKey = "";
   const draw = (force = false) => {
     const at = storyAt(story);
-    const key = `${angle}|${open.x}|${story}`;
+    const key = `${angle}|${open.x}|${place}`;
     if (!force && drawn.key === key) return;
+    const calm = still.matches;
+    const go = travelAt(calm ? Math.round(place) : place);
     const values = explodeAt(at.explode);
     values.sled = Math.max(open.x * data.travel, values.sled);
-    values.rack = angle + (STORY_ANGLE - angle) * at.turn;
+    values.rack = clamp(angle + (STORY_ANGLE - angle) * at.turn + (calm || !wide.matches ? 0 : go.swing), -27, 27);
+    paintTravel(go, calm);
     const next = Object.values(values)
       .map((v) => v.toFixed(3))
       .join("|");
@@ -226,11 +246,12 @@ export function mountDatacenter(root) {
     last = now;
     const calm = still.matches;
     // Ease toward the scroll target; scrolling owns the rack once the story has begun.
-    if (calm) story = storyTarget;
+    if (calm) place = placeTarget;
     else {
-      story += (storyTarget - story) * (1 - Math.exp(-dt / 0.09));
-      if (Math.abs(storyTarget - story) < 1e-3) story = storyTarget;
+      place += (placeTarget - place) * (1 - Math.exp(-dt / 0.09));
+      if (Math.abs(placeTarget - place) < 1e-3) place = placeTarget;
     }
+    story = sceneOf(place);
     if (scrolled()) {
       touring = false;
       openTarget = 0;
@@ -273,6 +294,7 @@ export function mountDatacenter(root) {
   };
   const once = () => {
     // Reduced motion: no loop; jump to the targets and paint one still frame.
+    place = placeTarget;
     story = storyTarget;
     if (scrolled()) openTarget = 0;
     showScene(Math.round(story));
@@ -394,14 +416,19 @@ export function mountDatacenter(root) {
   // The page's scroll story drives the figure through this.
   const api = {
     setStory(next) {
-      const target = clamp(next, 0, SCENES.length - 1);
-      if (target === storyTarget) return;
+      const target = clamp(next, 0, SIDES.length - 1);
+      if (target === placeTarget) return;
       const was = scrolled();
-      storyTarget = target;
+      placeTarget = target;
+      storyTarget = sceneOf(target);
       if (was && !scrolled()) hold(); // back in the hero: the idle tour resumes after a pause
       kick();
     },
   };
+  wide.addEventListener?.("change", () => {
+    travelKey = "";
+    draw(true);
+  });
   root.__dcx = api;
   return api;
 }

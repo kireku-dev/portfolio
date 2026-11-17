@@ -109,12 +109,13 @@ const controls =
     color: var(--anatomy-text);
     font-family: var(--anatomy-mono);
   }
+  /* No card: the rack, its turntable and the scene art float on the page; the Fig and
+     readout rows stay as small mono labels around the drawing. */
   .dcx .dcx-plate {
     position: relative;
-    background: var(--anatomy-card);
-    border: 1px solid #1e2635;
-    border-radius: 2px;
-    padding: 16px 18px 14px;
+    background: none;
+    border: 0;
+    padding: 0;
   }
   .dcx .dcx-row {
     display: flex;
@@ -153,6 +154,13 @@ const controls =
   .dcx .dcx-halo { filter: blur(18px); }
   /* The story's world layer: clipped to the stage, assemblies fade and drop in by scene step. */
   .dcx .dcx-stage { overflow: hidden; }
+  /* The camera frame fades out at its edges instead of cutting the drawing on a hard line. */
+  .dcx .dcx-stage {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent), linear-gradient(to bottom, transparent, #000 4%, #000 96%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent), linear-gradient(to bottom, transparent, #000 4%, #000 96%, transparent);
+    mask-composite: intersect;
+  }
   .dcx .dcx-world { overflow: hidden; }
   .dcx .dcx-world [data-k] { will-change: auto; }
   .dcx .dcx-world:not([data-flowing]) .iso-line[data-flow] { animation-play-state: paused; opacity: 0; }
@@ -199,7 +207,7 @@ const controls =
     .dcx .dcx-foot { flex-direction: column; align-items: flex-start; gap: 2px; }
   }
   @media (max-width: 560px) {
-    .dcx .dcx-plate { padding: 12px 10px 12px; overflow: hidden; }
+    .dcx .dcx-plate { overflow: hidden; }
     .dcx .dcx-detail { min-height: 3em; }
     .dcx .dcx-foot { flex-direction: column; gap: 2px; }
     .dcx .dcx-stage { width: 112%; margin: 6px -6%; }

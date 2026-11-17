@@ -6,7 +6,7 @@
 import * as A from "../anatomy/audit.mjs";
 import * as TA from "../anatomy/turn-audit.mjs";
 import { buildDatacenter, follow, TURN_RANGE, SLED_TRAVEL } from "./figure.mjs";
-import { STORY_ANGLE, explodeAt } from "./scenes.mjs";
+import { STORY_ANGLE, SWING, explodeAt } from "./scenes.mjs";
 
 const argv = process.argv.slice(2);
 const { T, R, P, out } = buildDatacenter();
@@ -20,6 +20,9 @@ TA.orbitOrExit(T, R, P, {
     { name: "open", at: (t) => follow({ rack: 18, sled: ease(Math.min(1, t)) * SLED_TRAVEL }), from: 0, to: 1, frame: 1 / 60 },
     { name: "turn-open", at: (t) => follow({ rack: TURN_RANGE[0] + (TURN_RANGE[1] - TURN_RANGE[0]) * (t / 4), sled: SLED_TRAVEL }), from: 0, to: 4, frame: 1 / 60 },
     // The scroll story's explode, at the angle the story holds the rack (scrubbed by scroll, sampled at 60 frames per unit of share).
+    // The swing on the crossing from the hero to chapter 1: up to SWING degrees on top of the tour's
+    // widest angle (14°), with the sled half out as the tour can leave it.
+    { name: "swing", at: (t) => follow({ rack: 14 + SWING * Math.sin(Math.PI * Math.min(1, t)), sled: SLED_TRAVEL / 2 }), from: 0, to: 1, frame: 1 / 60 },
     { name: "explode", at: (t) => follow({ rack: STORY_ANGLE, ...explodeAt(Math.min(1, t)) }), from: 0, to: 1, frame: 1 / 60 },
   ],
   quick: argv.includes("--quick"),

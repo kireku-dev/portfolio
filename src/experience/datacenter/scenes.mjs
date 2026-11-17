@@ -69,3 +69,31 @@ export function cameraAt(frames, s) {
   const b = frames[i + 1];
   return a.map((v, j) => v + (b[j] - v) * t);
 }
+
+// ---- travel: where the pinned figure sits beside the text ---------------------------------
+// The page's position p counts the hero as 0 and each chapter from 1 (so s = p − 1). Between
+// two of them p moves only in the middle 70 % of the scroll (the plateau is baked in by the
+// scroll driver), and the figure crosses the page in that same window.
+export const SIDES = [1, 0, 1, 0, 1, 0]; // 1 right, 0 left: hero, then one per chapter
+export const SWING = 10; // degrees the rack turns toward its direction of travel, at mid-crossing
+export const sceneOf = (p) => clamp(p - 1, 0, SCENES.length - 1);
+
+/**
+ * Where the figure is at p: side (0 left … 1 right), the extra turn of the rack and a scale.
+ * The rack only swings on the crossing from the hero to chapter 1, where it is alone on the
+ * stage: from chapter 2 on it either holds the audited explode angle or carries the world art
+ * (uplinks, desk, floor cable), which is drawn for STORY_ANGLE and cannot turn with it.
+ */
+export function travelAt(p) {
+  const x = clamp(p, 0, SIDES.length - 1);
+  const i = Math.min(SIDES.length - 2, Math.floor(x));
+  const t = x - i;
+  const dir = SIDES[i + 1] - SIDES[i]; // −1 moving left, +1 moving right
+  const arc = Math.sin(Math.PI * t);
+  return {
+    side: SIDES[i] + (SIDES[i + 1] - SIDES[i]) * smooth(t),
+    swing: i === 0 ? -dir * SWING * arc : 0, // a positive turn swings the rack's front to screen left
+    scale: 1 - 0.06 * arc,
+    lift: arc, // 0 at rest, 1 at mid-crossing
+  };
+}

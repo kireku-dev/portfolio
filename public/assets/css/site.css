@@ -292,21 +292,25 @@ ul {
   text-wrap: balance;
 }
 
-/* ---------- hero + story: one wrapper, the figure pinned beside both ---------- */
+/* ---------- hero + story: one wrapper, the figure pinned over both ----------
+   The pinned layer spans the whole wrapper; the figure takes half its width and the
+   story script slides it between the two halves (transform only). The text sits in the
+   other half: hero copy left, then the chapters alternate. */
 .scrolly {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-  column-gap: var(--s5);
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .scrolly > .hero {
   grid-column: 1;
   grid-row: 1;
+  max-width: 46%;
 }
 
 .scrolly > .hero-visual {
-  grid-column: 2;
+  grid-column: 1;
   grid-row: 1 / span 2;
+  pointer-events: none;
 }
 
 .scrolly > .story {
@@ -384,18 +388,32 @@ ul {
 
 .hero-visual {
   min-width: 0;
-  padding-block: var(--s5);
 }
 
-/* The figure stays in view through the hero and every chapter of the story. */
+/* The figure stays in view through the hero and every chapter of the story, centred in the
+   viewport height; without the script it simply rests on the right. */
 .hero-pin {
   position: sticky;
-  top: calc(var(--nav-h) + var(--s3));
+  top: var(--nav-h);
+  display: flex;
+  align-items: center;
+  height: calc(100svh - var(--nav-h));
 }
 
-/* Keep the whole card (stage, rows and caption) inside a short desktop viewport. */
 .hero-pin .dcx.iso {
-  max-width: min(760px, calc((100svh - var(--nav-h) - 236px) * 1.143 + 38px));
+  width: 50%;
+  max-width: none;
+  margin: 0;
+  pointer-events: auto;
+  transform: translate3d(100%, 0, 0);
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* The drawing, its labels and caption stay inside a short desktop viewport, labels hugging the drawing. */
+.hero-pin .dcx .dcx-plate,
+.hero-pin .dcx .dcx-caption {
+  max-width: calc((100svh - var(--nav-h) - 250px) * 1.143);
   margin-inline: auto;
 }
 
@@ -418,7 +436,23 @@ ul {
 /* ---------- story chapters ---------- */
 .story {
   padding-top: var(--s6);
-  border-top: 1px solid var(--line);
+}
+
+/* With the script the chapters alternate opposite the figure, and the script fades each one
+   in and out with the crossing, so no text is ever under the moving figure. */
+[data-story-live] .story-heading,
+[data-story-live] .story-chapter:nth-child(odd) article {
+  margin-left: auto;
+}
+
+.story-heading,
+.story-chapter article {
+  max-width: min(56ch, 44%);
+}
+
+/* The last chapter is a full screen tall, so the figure is still pinned while it is read. */
+.story-chapter:last-child {
+  min-height: calc(100svh - var(--nav-h));
 }
 
 .story-chapters {
@@ -432,18 +466,6 @@ ul {
   padding-block: var(--s5);
 }
 
-.story-chapter + .story-chapter {
-  border-top: 1px solid var(--line);
-}
-
-.story-chapter article {
-  max-width: 56ch;
-  transition: opacity 0.4s var(--ease);
-}
-
-[data-story-live] .story-chapter:not([data-current]) article {
-  opacity: 0.42;
-}
 
 .story-title {
   margin-top: var(--s3);
@@ -1132,6 +1154,29 @@ body.career-dialog-open {
   .scrolly > .story {
     grid-column: 1;
     grid-row: auto;
+    max-width: none;
+  }
+
+  [data-story-live] .story-heading,
+  [data-story-live] .story-chapter:nth-child(odd) article {
+    margin-left: 0;
+  }
+
+  .story-heading,
+  .story-chapter article {
+    max-width: 56ch;
+  }
+
+  .story-chapter + .story-chapter {
+    border-top: 1px solid var(--line);
+  }
+
+  .story-chapter article {
+    transition: opacity 0.4s var(--ease);
+  }
+
+  [data-story-live] .story-chapter:not([data-current]) article {
+    opacity: 0.42;
   }
 
   .hero {
@@ -1143,18 +1188,28 @@ body.career-dialog-open {
     display: contents;
   }
 
+  /* Pinned on top, on the page colour so the chapters scroll under it; no card, no rule. */
   .hero-pin {
     top: var(--nav-h);
     z-index: 5;
+    display: block;
+    height: auto;
     margin-inline: calc(-1 * var(--gutter));
     padding: var(--s2) var(--gutter);
     background: var(--bg);
-    border-bottom: 1px solid var(--line);
+    overflow: clip;
   }
 
   /* Pinned at a reduced height: about 40 % of the screen, the chapters scroll under it. */
   .hero-pin .dcx.iso {
+    width: 100%;
     max-width: min(640px, calc((42svh - 118px) * 1.333 + 20px));
+    margin-inline: auto;
+    transform: none;
+  }
+
+  .hero-pin .dcx .dcx-plate {
+    max-width: none;
   }
 
   .hero-pin .dcx .dcx-caption {
@@ -1166,7 +1221,8 @@ body.career-dialog-open {
     border-top: 0;
   }
 
-  .story-chapter {
+  .story-chapter,
+  .story-chapter:last-child {
     min-height: 62svh;
     align-items: flex-start;
   }
