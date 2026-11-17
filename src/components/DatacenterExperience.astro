@@ -4,8 +4,32 @@
 // src/experience/anatomy/LICENSE); the client script only turns, slides and blinks it.
 import { datacenterFigure } from '../experience/datacenter/render.mjs';
 import { stateAt, loadAt, readoutOf, detailOf } from '../experience/datacenter/model.mjs';
+import { SCENES } from '../experience/datacenter/scenes.mjs';
+import { portfolioData } from '../data/portfolio';
 
 const figure = datacenterFigure();
+// What the figure shows in each chapter of the story, for the title row and for screen readers.
+const descriptions: Record<string, string> = {
+  rack: 'Rack kr-01 cerrado sobre su base giratoria.',
+  internals:
+    'El rack se desarma: el techo se levanta, el servidor 07 sale de sus rieles y sus piezas se separan hacia arriba: disipadores, memoria, ventiladores, jaula de discos, fuentes y tarjeta de red.',
+  network:
+    'El rack vuelve a armarse y dos enlaces suben por el techo a una bandeja que llega a un mástil con dos antenas de panel y una antena de microondas que apunta a la nube.',
+  desk: 'Un escritorio con monitor, teclado, mouse y una taza; Daniel está sentado programando y en la pantalla hay líneas de código.',
+  together: 'Vista completa: el escritorio, el rack y la red conectados por sus cables hasta la nube.',
+};
+const scenes = SCENES.map((scene, index) => {
+  const chapter = portfolioData.story.chapters.find((item) => item.scene === scene);
+  return {
+    scene,
+    fig: `Fig 0${index + 1}`,
+    title: index === 0 ? 'Rack kr-01 / sled 07' : (chapter?.kicker ?? scene),
+    description: descriptions[scene],
+  };
+});
+const worldCss = figure.steps
+  .map((key: string) => `.dcx .dcx-world [data-k="${key}"]{opacity:var(--${key},0);transform:translate(0,calc((1 - var(--${key},0)) * -16px))}`)
+  .join('');
 const initial = stateAt(loadAt(0));
 const controls =
   'Rack kr-01, figura interactiva. Arrastra o usa las flechas izquierda y derecha para girar el rack; Enter o espacio saca o guarda el servidor 07; Inicio vuelve a la posición de reposo.';
@@ -14,8 +38,8 @@ const controls =
 <figure class="dcx iso" data-theme="dark">
   <div class="dcx-plate">
     <div class="dcx-row dcx-head" aria-hidden="true">
-      <span class="dcx-fig">Fig 01</span>
-      <span class="dcx-title">Rack kr-01 / sled 07</span>
+      <span class="dcx-fig" data-scene-fig>Fig 01</span>
+      <span class="dcx-title" data-scene-title>Rack kr-01 / sled 07</span>
     </div>
     <div
       class="dcx-stage iso-turn"
@@ -27,6 +51,7 @@ const controls =
       aria-valuemax={figure.data.range[1]}
       aria-valuenow="0"
       aria-valuetext="Servidor 07 dentro del rack; giro 0 grados"
+      aria-describedby="dcx-scene-text"
       style={`aspect-ratio:${figure.width}/${figure.height}`}
       set:html={figure.markup}
     />
@@ -35,6 +60,7 @@ const controls =
       <span class="dcx-readout" data-readout aria-hidden="true">{readoutOf(initial, 0)}</span>
     </div>
     <p class="dcx-sr" data-announce aria-live="polite"></p>
+    <p class="dcx-sr" id="dcx-scene-text" data-scene-text>{descriptions.rack}</p>
   </div>
   <figcaption class="dcx-caption">
     <span class="dcx-detail" data-detail>{detailOf(initial)}</span>
@@ -45,9 +71,10 @@ const controls =
     </span>
   </figcaption>
   <script type="application/json" data-dcx set:html={JSON.stringify(figure.data)} />
+  <script type="application/json" data-dcx-scenes set:html={JSON.stringify(scenes)} />
 </figure>
 
-<Fragment set:html={`<style>${figure.css}</style>`} />
+<Fragment set:html={`<style>${figure.css}${worldCss}</style>`} />
 
 <style is:global>
   /* Brand tokens mapped onto the anatomy ramp: blue-black tones, aqua as the one lit accent. */
@@ -104,6 +131,8 @@ const controls =
   .dcx .dcx-readout { color: var(--anatomy-text); font-variant-numeric: tabular-nums; }
   .dcx .dcx-hint { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
   .dcx .dcx-hint-touch { display: none; }
+  /* Past the hero, scrolling drives the rack: the hover and drag hint no longer applies. */
+  .dcx[data-scene]:not([data-scene='rack']) .dcx-hint { visibility: hidden; }
   @media (hover: none) and (pointer: coarse) {
     .dcx .dcx-hint-hover { display: none; }
     .dcx .dcx-hint-touch { display: inline; }
@@ -122,6 +151,21 @@ const controls =
   .dcx .dcx-stage:focus-visible { outline: 1px solid #00ffff; outline-offset: 4px; }
   .dcx .dcx-stage > svg { display: block; width: 100%; height: 100%; }
   .dcx .dcx-halo { filter: blur(18px); }
+  /* The story's world layer: clipped to the stage, assemblies fade and drop in by scene step. */
+  .dcx .dcx-stage { overflow: hidden; }
+  .dcx .dcx-world { overflow: hidden; }
+  .dcx .dcx-world [data-k] { will-change: auto; }
+  .dcx .dcx-world:not([data-flowing]) .iso-line[data-flow] { animation-play-state: paused; opacity: 0; }
+  .dcx .dcx-world .dcx-flow { stroke-width: 1.2px; stroke-dasharray: 2 14; }
+  .dcx .dcx-screen { fill: #0b0e14; }
+  .dcx .dcx-code { animation: dcx-type 9s steps(1, end) infinite; animation-delay: calc(var(--i) * 0.45s); }
+  .dcx .dcx-cursor { fill: #00ffff; animation: dcx-blink 1.06s steps(1, end) infinite; }
+  @keyframes dcx-type { 0% { opacity: 0.25; } 8% { opacity: 1; } }
+  @keyframes dcx-blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .dcx .dcx-code, .dcx .dcx-cursor { animation: none; }
+    .dcx .dcx-world [data-k] { transform: none !important; }
+  }
   .dcx .dcx-led-core { fill: #00ffff; }
   .dcx .dcx-led-glow { fill: #2e5bff; opacity: 0.32; }
   .dcx .dcx-led[data-kind='power'] .dcx-led-core,
@@ -164,8 +208,14 @@ const controls =
 
 <script>
   import { mountDatacenter } from '../experience/datacenter/live.js';
+  import { driveStory } from '../experience/datacenter/scroll.js';
 
-  const start = () => document.querySelectorAll<HTMLElement>('.dcx').forEach((root) => mountDatacenter(root));
+  const start = () =>
+    document.querySelectorAll<HTMLElement>('.dcx').forEach((root) => {
+      const figure = mountDatacenter(root);
+      const wrapper = root.closest<HTMLElement>('[data-story]');
+      if (wrapper) driveStory(wrapper, figure);
+    });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true });
   else start();
 </script>

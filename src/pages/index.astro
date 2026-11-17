@@ -8,6 +8,7 @@ import HobbiesSection from '../components/HobbiesSection.astro';
 import NavHeroSection from '../components/NavHeroSection.astro';
 import ProjectsSection from '../components/ProjectsSection.astro';
 import SkillsSection from '../components/SkillsSection.astro';
+import StorySection from '../components/StorySection.astro';
 import StudiesSection from '../components/StudiesSection.astro';
 import TalksSection from '../components/TalksSection.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -21,6 +22,7 @@ import { portfolioData } from '../data/portfolio';
   <main id="cv-document" class="cv-document">
     <NavHeroSection navLinks={portfolioData.navLinks} hero={portfolioData.hero}>
       <DatacenterExperience />
+      <StorySection slot="story" story={portfolioData.story} />
     </NavHeroSection>
     <AboutSection about={portfolioData.about} />
     <CareerSection career={portfolioData.career} />

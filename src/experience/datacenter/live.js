@@ -4,10 +4,7 @@
 
 import { TURN } from "../anatomy/turn.mjs";
 import { loadAt, stateAt, blinkHz, readoutOf, detailOf } from "./model.mjs";
-
-const follow = (values) => ({ ...values, mid: (values.sled ?? 0) / 2 });
-const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
-const smooth = (x) => x * x * (3 - 2 * x);
+import { follow, storyAt, explodeAt, cameraAt, STORY_ANGLE, SCENES, clamp, smooth } from "./scenes.mjs";
 const hash = (a, b) => {
   let h = (a * 374761393 + b * 668265263) | 0;
   h = Math.imul(h ^ (h >>> 13), 1274126177);
@@ -40,13 +37,19 @@ const tourAt = (t) => {
   return { angle: a0 + (a1 - a0) * u, open: u < 0.5 ? o0 : o1 };
 };
 export function mountDatacenter(root) {
-  if (root.dataset.mounted) return;
+  if (root.dataset.mounted) return root.__dcx;
   root.dataset.mounted = "1";
   const data = JSON.parse(root.querySelector("script[data-dcx]").textContent);
   const stage = root.querySelector(".dcx-stage");
   const readout = root.querySelector("[data-readout]");
   const detail = root.querySelector("[data-detail]");
   const announcer = root.querySelector("[data-announce]");
+  const sceneText = root.querySelector("[data-scene-text]");
+  const sceneTitle = root.querySelector("[data-scene-title]");
+  const sceneFig = root.querySelector("[data-scene-fig]");
+  const world = stage.querySelector(".dcx-world");
+  const layers = [...stage.querySelectorAll(":scope > svg")];
+  const scenes = JSON.parse(root.querySelector("script[data-dcx-scenes]")?.textContent ?? "[]");
   const still = matchMedia("(prefers-reduced-motion: reduce)");
   const [lo, hi] = data.range;
 
@@ -66,6 +69,19 @@ export function mountDatacenter(root) {
   let drag = null;
   let fanTurn = 0;
   let readoutAt = 0;
+  // Scroll story: s runs 0…4 (one unit per chapter); the page's scroll sets the target.
+  let story = 0;
+  let storyTarget = 0;
+  const scrolled = () => story > 0.02 || storyTarget > 0.02;
+  const steps = (data.steps ?? []).map((key) => {
+    const scene = key[0];
+    const siblings = data.steps.filter((other) => other[0] === scene);
+    return { key, scene, index: siblings.indexOf(key), count: siblings.length, value: -1 };
+  });
+  let camera = "";
+  let sceneIndex = 0;
+  let announced = "";
+  let announceTimer = 0;
 
   let own = false;
   let held = false; // a tool (window.__isoTurn) holds the figure: freeze LEDs and fans too
@@ -95,17 +111,54 @@ export function mountDatacenter(root) {
   // live layer is redrawn every other frame; motion stays time-based either way.
   let cost = 0;
   let skip = false;
+  // The story's share of each step of the world layer: assemblies arrive one after another.
+  const paintWorld = (at, calm) => {
+    if (!world) return;
+    const shares = { n: at.network, d: at.desk, l: at.links };
+    for (const step of steps) {
+      const share = shares[step.scene] ?? 0;
+      const lead = (step.index / (step.count + 1)) * 0.6;
+      const value = calm ? (share > 0.5 ? 1 : 0) : Math.round(smooth((share - lead) / 0.4) * 1000) / 1000;
+      if (value !== step.value) {
+        world.style.setProperty(`--${step.key}`, String(value));
+        step.value = value;
+      }
+    }
+    world.toggleAttribute("data-flowing", !calm && (at.network > 0.95 || at.links > 0.6));
+    const frame = cameraAt(data.frames, at.camera)
+      .map((v) => v.toFixed(1))
+      .join(" ");
+    if (frame !== camera) {
+      camera = frame;
+      for (const svg of layers) svg.setAttribute("viewBox", frame);
+    }
+  };
+  // The live rack is re-projected only when its group values change; the world layer and the
+  // camera are cheap attribute writes and follow the story every frame.
+  let groupsKey = "";
   const draw = (force = false) => {
-    if (!force && drawn.angle === angle && drawn.open === open.x) return;
-    if (!force && cost > 14 && (skip = !skip)) return;
-    const t0 = performance.now();
-    own = true;
-    controller.set({ rack: angle, sled: open.x * data.travel });
-    own = false;
-    const ms = performance.now() - t0;
-    cost = cost ? cost * 0.85 + ms * 0.15 : ms;
-    if (cost < 9) skip = false;
-    drawn = { angle, open: open.x };
+    const at = storyAt(story);
+    const key = `${angle}|${open.x}|${story}`;
+    if (!force && drawn.key === key) return;
+    const values = explodeAt(at.explode);
+    values.sled = Math.max(open.x * data.travel, values.sled);
+    values.rack = angle + (STORY_ANGLE - angle) * at.turn;
+    const next = Object.values(values)
+      .map((v) => v.toFixed(3))
+      .join("|");
+    if (force || next !== groupsKey) {
+      if (!force && cost > 14 && (skip = !skip)) return;
+      const t0 = performance.now();
+      own = true;
+      controller.set(values);
+      own = false;
+      groupsKey = next;
+      const ms = performance.now() - t0;
+      cost = cost ? cost * 0.85 + ms * 0.15 : ms;
+      if (cost < 9) skip = false;
+    }
+    paintWorld(at, still.matches);
+    drawn = { angle, open: open.x, key };
   };
 
   const paintModel = (dt, calm, now) => {
@@ -132,20 +185,34 @@ export function mountDatacenter(root) {
     }
     if (now - readoutAt > 240 || calm) {
       readoutAt = now;
-      const text = readoutOf(state, open.x);
+      const text = readoutOf(state, Math.max(open.x, explodeAt(storyAt(story).explode).sled / data.travel));
       if (readout.textContent !== text) readout.textContent = text;
       const more = detailOf(state);
       if (detail && detail.textContent !== more) detail.textContent = more;
     }
   };
 
+  // One description per scene, for the slider's text and the polite announcer.
+  const showScene = (index) => {
+    if (index === sceneIndex || !scenes[index]) return;
+    sceneIndex = index;
+    const scene = scenes[index];
+    root.dataset.scene = SCENES[index];
+    if (sceneText) sceneText.textContent = scene.description;
+    if (sceneTitle) sceneTitle.textContent = scene.title;
+    if (sceneFig) sceneFig.textContent = scene.fig;
+    describe();
+    clearTimeout(announceTimer);
+    announceTimer = setTimeout(() => {
+      if (announcer && announcer.textContent !== scene.description) announcer.textContent = announced = scene.description;
+    }, 700);
+  };
   const describe = () => {
     const where = openTarget > 0.5 ? "Servidor 07 fuera del rack, sin tapa" : "Servidor 07 dentro del rack";
     stage.setAttribute("aria-valuenow", String(Math.round(angleTarget)));
-    stage.setAttribute("aria-valuetext", `${where}; giro ${Math.round(angleTarget)} grados`);
+    if (sceneIndex > 0 && scenes[sceneIndex]) stage.setAttribute("aria-valuetext", scenes[sceneIndex].description);
+    else stage.setAttribute("aria-valuetext", `${where}; giro ${Math.round(angleTarget)} grados`);
   };
-  let announced = "";
-  let announceTimer = 0;
   const announce = () => {
     clearTimeout(announceTimer);
     announceTimer = setTimeout(() => {
@@ -158,6 +225,16 @@ export function mountDatacenter(root) {
     const dt = last ? Math.min((now - last) / 1000, 1 / 30) : 1 / 60;
     last = now;
     const calm = still.matches;
+    // Ease toward the scroll target; scrolling owns the rack once the story has begun.
+    if (calm) story = storyTarget;
+    else {
+      story += (storyTarget - story) * (1 - Math.exp(-dt / 0.09));
+      if (Math.abs(storyTarget - story) < 1e-3) story = storyTarget;
+    }
+    if (scrolled()) {
+      touring = false;
+      openTarget = 0;
+    }
     if (touring && !calm) {
       tourClock += dt;
       const at = tourAt(tourClock);
@@ -186,6 +263,7 @@ export function mountDatacenter(root) {
     draw();
     if (!held) paintModel(dt, calm, now);
     frame = visible && !calm ? requestAnimationFrame(tick) : 0;
+    showScene(Math.round(story));
   }
   const run = () => {
     if (!frame && visible) {
@@ -195,6 +273,9 @@ export function mountDatacenter(root) {
   };
   const once = () => {
     // Reduced motion: no loop; jump to the targets and paint one still frame.
+    story = storyTarget;
+    if (scrolled()) openTarget = 0;
+    showScene(Math.round(story));
     angle = angleTarget;
     open.x = openTarget;
     open.v = 0;
@@ -206,7 +287,7 @@ export function mountDatacenter(root) {
     touring = false;
     clearTimeout(idle);
     idle = setTimeout(() => {
-      if (hovering || drag) return;
+      if (hovering || drag || scrolled()) return;
       touring = !still.matches;
       tourClock = 0;
       kick();
@@ -243,7 +324,7 @@ export function mountDatacenter(root) {
   });
 
   stage.addEventListener("pointerenter", (event) => {
-    if (event.pointerType !== "mouse") return;
+    if (event.pointerType !== "mouse" || scrolled()) return;
     hovering = true;
     steer({ open: 1 });
   });
@@ -253,7 +334,7 @@ export function mountDatacenter(root) {
     if (!drag) steer({ open: 0 });
   });
   stage.addEventListener("pointerdown", (event) => {
-    if (event.button !== undefined && event.button !== 0) return;
+    if ((event.button !== undefined && event.button !== 0) || scrolled()) return;
     drag = { id: event.pointerId, x: event.clientX, base: angle, captured: false, type: event.pointerType };
     hold();
   });
@@ -283,6 +364,7 @@ export function mountDatacenter(root) {
   stage.addEventListener("pointerup", release);
   stage.addEventListener("pointercancel", release);
   stage.addEventListener("keydown", (event) => {
+    if (scrolled()) return;
     const step = event.shiftKey ? 15 : 5;
     // Step from the angle the reader sees, not from where the tour was heading.
     const from = touring ? angle : angleTarget;
@@ -308,4 +390,18 @@ export function mountDatacenter(root) {
     once();
     describe();
   } else paintModel(0, false, performance.now());
+
+  // The page's scroll story drives the figure through this.
+  const api = {
+    setStory(next) {
+      const target = clamp(next, 0, SCENES.length - 1);
+      if (target === storyTarget) return;
+      const was = scrolled();
+      storyTarget = target;
+      if (was && !scrolled()) hold(); // back in the hero: the idle tour resumes after a pause
+      kick();
+    },
+  };
+  root.__dcx = api;
+  return api;
 }

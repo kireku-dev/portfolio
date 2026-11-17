@@ -1,0 +1,36 @@
+---
+// The story chapters beside the pinned figure. Plain HTML: the text reads the same without
+// JS; the figure's script reads [data-story-chapter] to drive the rack through its scenes.
+interface Props {
+  story: {
+    sectionLabel: string;
+    sectionTitle: string;
+    chapters: { id: string; scene: string; kicker: string; title: string; copy: string[] }[];
+  };
+}
+
+const { story } = Astro.props;
+---
+
+<section id="story" class="story" aria-labelledby="story-title">
+  <div class="section-heading story-heading">
+    <p class="eyebrow section-label"><span class="tick" aria-hidden="true"></span><b>00</b> / Historia</p>
+    <h2 class="section-title" id="story-title">{story.sectionTitle}</h2>
+  </div>
+  <ol class="story-chapters">
+    {
+      story.chapters.map((chapter, index) => (
+        <li class="story-chapter" id={chapter.id} data-story-chapter data-scene={chapter.scene}>
+          <article aria-labelledby={`${chapter.id}-title`}>
+            <p class="eyebrow story-kicker">
+              <span class="tick" aria-hidden="true" />
+              <b>{String(index + 1).padStart(2, '0')}</b> / {chapter.kicker}
+            </p>
+            <h3 class="story-title" id={`${chapter.id}-title`}>{chapter.title}</h3>
+            {chapter.copy.map((paragraph) => <p class="story-copy">{paragraph}</p>)}
+          </article>
+        </li>
+      ))
+    }
+  </ol>
+</section>

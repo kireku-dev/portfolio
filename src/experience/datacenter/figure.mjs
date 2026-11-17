@@ -9,6 +9,9 @@
 import * as k from "../anatomy/iso-kit.mjs";
 import * as A from "../anatomy/audit.mjs";
 import { turning } from "../anatomy/turn-build.mjs";
+import { SLED_TRAVEL, SLED_EXTRA, ROOF_LIFT, LIFTS, STORY_ANGLE, follow, explodeAt } from "./scenes.mjs";
+
+export { SLED_TRAVEL, follow };
 
 export const WIDTH = 640;
 export const HEIGHT = 560;
@@ -17,7 +20,6 @@ export const ELEVATION = 32;
 // Degrees the reader can turn the rack. With the camera at 30° this keeps every face of
 // the rack between 3° and 57° from the view, so no large face ever turns edge-on.
 export const TURN_RANGE = [-27, 27];
-export const SLED_TRAVEL = 112; // full extension of the slides
 export const U = 8.9;
 
 const U1 = 13; // bottom of U1
@@ -59,8 +61,13 @@ export function buildDatacenter() {
   const R = A.recorder(P);
   const T = turning(P, { recorder: R });
   const rack = T.group("rack", { turn: { pivot: [0, 0] } });
-  const sled = T.group("sled", { parent: rack, slide: { direction: [1, 0, 0], travel: SLED_TRAVEL } });
+  // The roof panel and its fans lift off as the story takes the rack apart.
+  const roofGroup = T.group("roof", { parent: rack, slide: { direction: [0, 0, 1], travel: ROOF_LIFT } });
+  // The sled runs out on its slides (SLED_TRAVEL) and then off them (SLED_EXTRA) in the story.
+  const sled = T.group("sled", { parent: rack, slide: { direction: [1, 0, 0], travel: SLED_TRAVEL + SLED_EXTRA } });
   const mid = T.group("mid", { parent: rack, slide: { direction: [1, 0, 0], travel: SLED_TRAVEL / 2 } });
+  // Exploded view: assemblies lifted straight up off the sled once it is clear of the rack.
+  const lifts = Object.fromEntries(LIFTS.map(([name, rise]) => [name, T.group(name, { parent: sled, slide: { direction: [0, 0, 1], travel: rise } })]));
   const live = T.layer("rack");
   T.stack(["back", "rack", "front"]);
 
@@ -137,25 +144,25 @@ export function buildDatacenter() {
     box(`rail.rear.${sy}`, rack, [-RAIL_X[1], -RAIL_X[0]], ys, [BASE_BAR[1], TOP_BAR[0]], { tone: "mid" });
   }
   // Roof panel with two exhaust fans whose rotors turn with the model's fan duty.
-  const roof = box("roof.panel", rack, [-69, 69], [-45, 45], [TOP_BAR[1] - 2, TOP_BAR[1]], { tone: "mid", bevel: 0.5 });
+  const roof = box("roof.panel", roofGroup, [-69, 69], [-45, 45], [TOP_BAR[1] - 2, TOP_BAR[1]], { tone: "mid", bevel: 0.5 });
   {
     // Perforated vent field between the fans, a label plate, and a cable-entry brush at the rear.
     const holes = [];
     for (let i = 0; i < 3; i++) for (let j = 0; j < 12; j++) holes.push(slot(57 + i * 8.6, 17 + j * 5, 6.4, 1.3));
     const label = line(rect(118, 66, 13, 8), "lo") + line("M120 68.6H128M120 70.6H126M120 72.6H129", "lo", ' data-free=""');
     top(roof, [-69], [-45], TOP_BAR[1], line(holes.join(""), "lo") + label);
-    const brush = box("roof.brush", rack, [-62, -50], [-26, 26], [TOP_BAR[1], TOP_BAR[1] + 0.8], { tone: "mid", r: 1.2, steps: 3 });
+    const brush = box("roof.brush", roofGroup, [-62, -50], [-26, 26], [TOP_BAR[1], TOP_BAR[1] + 0.8], { tone: "mid", r: 1.2, steps: 3 });
     const bristles = [];
     for (let j = 1; j < 26; j++) bristles.push(`M${f(5.2)} ${f(j * 2)}H${f(6.8)}`);
     top(brush, [-62], [-26], TOP_BAR[1] + 0.8, line(rect(1.2, 1.2, 9.6, 49.6), "faint") + line(bristles.join(""), "faint") + line("M6 1.2V50.8", "lo"));
     // Lifting eye nuts on the four corners.
     for (const [x, y] of [[-60, -37], [-60, 37], [60, -37], [60, 37]]) {
-      vround(`roof.eye.${x}.${y}`, rack, [x, y], 2.6, [TOP_BAR[1], TOP_BAR[1] + 2.2], { tone: "mid", details: { rings: [{ at: [TOP_BAR[1] + 2.2, 0, 0], normal: [0, 0, 1], r: 1.2, tone: "lo" }] } });
+      vround(`roof.eye.${x}.${y}`, roofGroup, [x, y], 2.6, [TOP_BAR[1], TOP_BAR[1] + 2.2], { tone: "mid", details: { rings: [{ at: [TOP_BAR[1] + 2.2, 0, 0], normal: [0, 0, 1], r: 1.2, tone: "lo" }] } });
     }
   }
   for (const [i, x] of [-30, 30].entries()) {
     const RF = 15;
-    const housing = vround(`roof.fan.${i}`, rack, [x, 0], RF, [TOP_BAR[1], TOP_BAR[1] + 3.2], { tone: "mid" });
+    const housing = vround(`roof.fan.${i}`, roofGroup, [x, 0], RF, [TOP_BAR[1], TOP_BAR[1] + 3.2], { tone: "mid" });
     const zf = TOP_BAR[1] + 3.2;
     const ring = (r, steps = 72) => Array.from({ length: steps + 1 }, (_, j) => `${j ? "L" : "M"}${f(r * Math.cos((j / steps) * Math.PI * 2))} ${f(r * Math.sin((j / steps) * Math.PI * 2))}`).join("") + "Z";
     const blades = Array.from({ length: 7 }, (_, j) => {
@@ -315,7 +322,7 @@ export function buildDatacenter() {
   ears("sled", sled, sledZr, { handles: true, tone: "hi" });
 
   // Drive cage behind the bezel: ten NVMe carriers seen from above.
-  const cage = box("sled.cage", sled, [45, BEZEL_X[0]], [-40, 40], [z(1.3), z(16.4)], { tone: "hi", bevel: 0.3 });
+  const cage = box("sled.cage", lifts["lift.front"], [45, BEZEL_X[0]], [-40, 40], [z(1.3), z(16.4)], { tone: "hi", bevel: 0.3 });
   {
     const lanes = [];
     for (let i = 1; i < 10; i++) lanes.push(`M0 ${f(i * 8)}H${f(BEZEL_X[0] - 45)}`);
@@ -324,9 +331,9 @@ export function buildDatacenter() {
   // Fan wall: six hot-swap modules, each with a pull tab and a status LED.
   for (let i = 0; i < 6; i++) {
     const y0 = -40 + i * 13.4;
-    const mod = box(`sled.fan.${i}`, sled, [37, 45], [y0, y0 + 12.6], [z(1.3), z(15.3)], { tone: "hi", bevel: 0.3, details: { seams: [z(11)] } });
+    const mod = box(`sled.fan.${i}`, lifts["lift.front"], [37, 45], [y0, y0 + 12.6], [z(1.3), z(15.3)], { tone: "hi", bevel: 0.3, details: { seams: [z(11)] } });
     top(mod, [37], [y0], z(15.3), line(rect(1, 1.2, 6, 10.2), "faint"));
-    box(`sled.fan.tab.${i}`, sled, [39.2, 42.8], [y0 + 4.6, y0 + 8], [z(15.3), z(16.3)], { tone: "mid" });
+    box(`sled.fan.tab.${i}`, lifts["lift.front"], [39.2, 42.8], [y0 + 4.6, y0 + 8], [z(15.3), z(16.3)], { tone: "mid" });
     led(mod, [44, y0 + 10.6, z(15.3)], [0, 0, 1], "fan", { fan: i });
   }
   // Motherboard.
@@ -335,7 +342,7 @@ export function buildDatacenter() {
   // Two sockets with tower heatsinks (the lit parts), DIMMs either side, VRM chokes behind.
   for (const [ci, cy] of [-20, 20].entries()) {
     box(`sled.cpu.${ci}.socket`, sled, [3.6, 24.4], [cy - 10.6, cy + 10.6], [z(2.1), z(3.1)], { tone: "mid" });
-    const sink = box(`sled.cpu.${ci}.sink`, sled, [5, 23], [cy - 9.4, cy + 9.4], [z(3.1), z(15.4)], {
+    const sink = box(`sled.cpu.${ci}.sink`, lifts["lift.sinks"], [5, 23], [cy - 9.4, cy + 9.4], [z(3.1), z(15.4)], {
       tone: "hi",
       lit: true,
       bevel: 0.3,
@@ -347,7 +354,7 @@ export function buildDatacenter() {
     for (const side of [-1, 1])
       for (let d = 0; d < 4; d++) {
         const y = side < 0 ? cy - 10.9 - d * 1.55 - 0.9 : cy + 10.9 + d * 1.55;
-        box(`sled.dimm.${ci}.${side}.${d}`, sled, [2, 27], [y, y + 0.9], [z(2.1), z(8.6)], { tone: "hi", details: { seams: [z(3.1)] } });
+        box(`sled.dimm.${ci}.${side}.${d}`, lifts["lift.dimms"], [2, 27], [y, y + 0.9], [z(2.1), z(8.6)], { tone: "hi", details: { seams: [z(3.1)] } });
       }
     for (let j = 0; j < 5; j++) {
       const y = cy - 8 + j * 4;
@@ -359,11 +366,11 @@ export function buildDatacenter() {
   vround("sled.battery", sled, [-28, -12], 2.2, [z(2.1), z(2.7)], { tone: "mid" });
   // Redundant PSUs at the rear right, riser cage with the NIC at the rear left.
   for (const [i, y0] of [19.4, 30.2].entries()) {
-    const psu = box(`sled.psu.${i}`, sled, [BODY_X[0] + 1, -36], [y0, y0 + 10.4], [z(1.3), z(8.6)], { tone: "hi", bevel: 0.3, details: { seams: [z(7.6)] } });
+    const psu = box(`sled.psu.${i}`, lifts["lift.psu"], [BODY_X[0] + 1, -36], [y0, y0 + 10.4], [z(1.3), z(8.6)], { tone: "hi", bevel: 0.3, details: { seams: [z(7.6)] } });
     const slots = Array.from({ length: 6 }, (_, j) => rect(16 + j * 2.6, 2, 1.2, 6.4)).join("");
     top(psu, [BODY_X[0] + 1], [y0], z(8.6), line(slots, "faint"));
   }
-  const riser = box("sled.riser", sled, [BODY_X[0] + 1, -42], [-40, -13], [z(1.3), z(16.4)], { tone: "hi", bevel: 0.3 });
+  const riser = box("sled.riser", lifts["lift.riser"], [BODY_X[0] + 1, -42], [-40, -13], [z(1.3), z(16.4)], { tone: "hi", bevel: 0.3 });
   top(riser, [BODY_X[0] + 1], [-40], z(16.4), line(rect(2, 3, 21, 21), "faint") + line(rect(9, 9, 7, 7), "lo") + line("M9 10.4H16M9 12H16M9 13.6H16", "lo"));
 
   // ---- static: turntable plinth with degree ticks ---------------------------------
@@ -382,6 +389,8 @@ export function buildDatacenter() {
   const poses = () => {
     const out = [];
     for (let a = TURN_RANGE[0]; a <= TURN_RANGE[1]; a += 2) for (const s of [0, 0.2, 0.4, 0.6, 0.8, 1]) out.push(follow({ rack: a, sled: s * SLED_TRAVEL }));
+    // The story's explode, at the angle the story holds the rack.
+    for (let i = 0; i <= 50; i++) out.push(follow({ rack: STORY_ANGLE, ...explodeAt(i / 50) }));
     return out;
   };
   const out = T.build({ statics: R.items, poses });
@@ -389,8 +398,6 @@ export function buildDatacenter() {
   return { T, R, P, out, leds, fans, poses };
 }
 
-/** Maps the figure's values to group values: the intermediate slide member travels half as far. */
-export const follow = (values) => ({ ...values, mid: (values.sled ?? 0) / 2 });
 
 export const LABEL =
   "Ilustración isométrica de un rack de servidores de 12U sobre una base giratoria: switch en la parte superior, organizador de cables, servidores de 2U, un UPS abajo y una PDU vertical. El servidor 07 sale sobre sus rieles telescópicos sin tapa y deja ver la jaula de discos NVMe, la pared de seis ventiladores, la placa base con dos procesadores bajo disipadores de aletas, dieciséis módulos de memoria, fuentes redundantes y la tarjeta de red.";

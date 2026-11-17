@@ -38,6 +38,8 @@ const primaryLinks = navLinks.filter((link) => link.href in navLabels);
   <button type="button" class="nav-action" id="cta-print-cv">Imprimir CV</button>
 </nav>
 
+<!-- The hero and the story share one wrapper, so the figure stays pinned beside both. -->
+<div class="scrolly" data-story>
 <header id="hero" class="hero">
   <div class="hero-copy">
     <p class="eyebrow"><span class="tick" aria-hidden="true"></span>Curriculum vitae <b>/</b> Guatemala · 2026</p>
@@ -52,10 +54,6 @@ const primaryLinks = navLinks.filter((link) => link.href in navLabels);
     </div>
   </div>
 
-  <div class="hero-visual">
-    <slot />
-  </div>
-
   <dl class="hero-metrics" aria-label="Resumen profesional">
     {
       hero.metrics.map((metric) => (
@@ -67,3 +65,12 @@ const primaryLinks = navLinks.filter((link) => link.href in navLabels);
     }
   </dl>
 </header>
+
+<div class="hero-visual">
+  <div class="hero-pin" data-story-pin>
+    <slot />
+  </div>
+</div>
+
+<slot name="story" />
+</div>

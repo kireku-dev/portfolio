@@ -263,7 +263,7 @@ ul {
 
 /* ---------- layout ---------- */
 .cv-document > section,
-.hero {
+.scrolly {
   width: 100%;
   max-width: calc(var(--max) + 2 * var(--gutter));
   margin: 0 auto;
@@ -292,21 +292,38 @@ ul {
   text-wrap: balance;
 }
 
-/* ---------- hero ---------- */
-.hero {
+/* ---------- hero + story: one wrapper, the figure pinned beside both ---------- */
+.scrolly {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-  grid-template-areas:
-    'copy visual'
-    'metrics metrics';
-  gap: var(--s5) var(--s5);
-  align-items: center;
+  column-gap: var(--s5);
+}
+
+.scrolly > .hero {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.scrolly > .hero-visual {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+.scrolly > .story {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--s5);
   min-height: calc(100dvh - var(--nav-h));
-  padding-block: var(--s5) var(--s5);
+  padding-block: var(--s5);
 }
 
 .hero-copy {
-  grid-area: copy;
   max-width: 600px;
 }
 
@@ -366,15 +383,79 @@ ul {
 }
 
 .hero-visual {
-  grid-area: visual;
   min-width: 0;
+  padding-block: var(--s5);
+}
+
+/* The figure stays in view through the hero and every chapter of the story. */
+.hero-pin {
+  position: sticky;
+  top: calc(var(--nav-h) + var(--s3));
+}
+
+/* Keep the whole card (stage, rows and caption) inside a short desktop viewport. */
+.hero-pin .dcx.iso {
+  max-width: min(760px, calc((100svh - var(--nav-h) - 236px) * 1.143 + 38px));
+  margin-inline: auto;
 }
 
 .hero-metrics {
-  grid-area: metrics;
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   border-top: 1px solid var(--line);
+}
+
+.hero-metrics .metric:nth-child(3n + 1) {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.hero-metrics .metric:nth-child(n + 4) {
+  border-top: 1px solid var(--line);
+  margin-top: var(--s3);
+}
+
+/* ---------- story chapters ---------- */
+.story {
+  padding-top: var(--s6);
+  border-top: 1px solid var(--line);
+}
+
+.story-chapters {
+  list-style: none;
+}
+
+.story-chapter {
+  display: flex;
+  align-items: center;
+  min-height: 88vh;
+  padding-block: var(--s5);
+}
+
+.story-chapter + .story-chapter {
+  border-top: 1px solid var(--line);
+}
+
+.story-chapter article {
+  max-width: 56ch;
+  transition: opacity 0.4s var(--ease);
+}
+
+[data-story-live] .story-chapter:not([data-current]) article {
+  opacity: 0.42;
+}
+
+.story-title {
+  margin-top: var(--s3);
+  font: 600 clamp(22px, 2.4vw, 30px)/1.18 var(--disp);
+  letter-spacing: -0.015em;
+  color: var(--fg-strong);
+  text-wrap: balance;
+}
+
+.story-copy {
+  margin-top: var(--s3);
+  color: var(--fg);
 }
 
 .metric {
@@ -1043,13 +1124,51 @@ body.career-dialog-open {
 
 /* ---------- responsive ---------- */
 @media (max-width: 1080px) {
-  .hero {
+  .scrolly {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      'copy'
-      'visual'
-      'metrics';
+  }
+
+  .scrolly > .hero,
+  .scrolly > .story {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .hero {
     min-height: 0;
+  }
+
+  /* The pin becomes a child of the wrapper, so it stays at the top through every chapter. */
+  .scrolly > .hero-visual {
+    display: contents;
+  }
+
+  .hero-pin {
+    top: var(--nav-h);
+    z-index: 5;
+    margin-inline: calc(-1 * var(--gutter));
+    padding: var(--s2) var(--gutter);
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* Pinned at a reduced height: about 40 % of the screen, the chapters scroll under it. */
+  .hero-pin .dcx.iso {
+    max-width: min(640px, calc((42svh - 118px) * 1.333 + 20px));
+  }
+
+  .hero-pin .dcx .dcx-caption {
+    display: none;
+  }
+
+  .story {
+    padding-top: var(--s5);
+    border-top: 0;
+  }
+
+  .story-chapter {
+    min-height: 62svh;
+    align-items: flex-start;
   }
 
   .hero-copy {
@@ -1074,6 +1193,17 @@ body.career-dialog-open {
 @media (max-width: 760px) {
   :root {
     --nav-h: 56px;
+  }
+
+  /* Pinned on a phone: a wider stage keeps the card short; the drawing is letterboxed in it. */
+  .hero-pin .dcx.iso {
+    max-width: none;
+  }
+
+  .hero-pin .dcx .dcx-stage {
+    aspect-ratio: 4 / 3 !important;
+    width: 100%;
+    margin: 4px 0;
   }
 
   .nav-links {
