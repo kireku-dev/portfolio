@@ -53,7 +53,9 @@ export function storyAt(s) {
     s: x,
     turn: smooth(x / 0.25), // share of the way from the reader's angle to STORY_ANGLE
     explode,
-    network: span(x, 1.5, 1.95),
+    // The mast and its uplinks leave while the camera moves to the desk (so the desk frame can
+    // hold the whole rack without cutting the mast), and come back for the closing view.
+    network: span(x, 1.5, 1.95) * (1 - span(x, 2.15, 2.55)) + span(x, 3.25, 3.7),
     desk: span(x, 2.3, 2.9),
     links: span(x, 3.3, 3.85),
     camera: x, // the camera interpolates between the scene frames with smooth steps

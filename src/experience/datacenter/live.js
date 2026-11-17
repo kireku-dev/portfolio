@@ -138,8 +138,21 @@ export function mountDatacenter(root) {
       for (const svg of layers) svg.setAttribute("viewBox", frame);
     }
   };
+  // The long caption (detail line, airflow note, keys) belongs to the hero: it fades out on the
+  // crossing to chapter 1 and leaves the accessibility tree once hidden; the per-scene text takes over.
+  const caption = root.querySelector(".dcx-caption");
+  let captionShown = -1;
+  const paintCaption = (calm) => {
+    if (!caption) return;
+    const value = calm ? (place < 0.5 ? 1 : 0) : Math.round((1 - smooth((place - 0.1) / 0.35)) * 100) / 100;
+    if (value === captionShown) return;
+    captionShown = value;
+    caption.style.opacity = String(value);
+    caption.style.visibility = value === 0 ? "hidden" : "";
+  };
   // The figure's place on the page: one transform on the figure, no layout reads.
   const paintTravel = (go, calm) => {
+    paintCaption(calm);
     let transform;
     if (wide.matches) {
       const scale = calm ? 1 : go.scale;

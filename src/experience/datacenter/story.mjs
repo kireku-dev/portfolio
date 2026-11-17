@@ -293,13 +293,15 @@ function codeMarkup(at, width, [z0, z1]) {
 }
 
 /** A camera frame [x, y, w, h] around screen points, padded, at the figure's aspect. */
-function frameAround(points, pad, aspect = WIDTH / HEIGHT) {
+function frameAround(points, pad, aspect = WIDTH / HEIGHT, share = 0) {
   const xs = points.map((p) => p[0]);
   const ys = points.map((p) => p[1]);
-  let x0 = Math.min(...xs) - pad;
-  let x1 = Math.max(...xs) + pad;
-  let y0 = Math.min(...ys) - pad;
-  let y1 = Math.max(...ys) + pad;
+  // `share` keeps a margin of that share of the extent, so nothing sits in the stage's faded edges.
+  const grow = Math.max(pad, share * Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys)));
+  let x0 = Math.min(...xs) - grow;
+  let x1 = Math.max(...xs) + grow;
+  let y0 = Math.min(...ys) - grow;
+  let y1 = Math.max(...ys) + grow;
   const w = x1 - x0;
   const h = y1 - y0;
   if (w / h > aspect) {
@@ -338,7 +340,9 @@ export function storyFrames(R) {
     [0, 0, WIDTH, HEIGHT],
     frameAround([...sled, ...roof, ...boxPoints([0, 75], [-60, 60], [FLOOR, 136])], 16),
     frameAround([...rack, ...net], 24),
-    frameAround([...desk, ...link], 26),
+    // The desk with the whole rack beside it (the mast is away in this scene): every frame from
+    // chapter 03 on holds the whole rack, so no camera move between them ever cuts it.
+    frameAround([...desk, ...rack], 26, WIDTH / HEIGHT, 0.08),
     frameAround([...rack, ...net, ...desk, ...link], 22),
   ];
 }
